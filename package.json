@@ -1,5 +1,5 @@
 {
-  "homepage": "http://bautinogal.github.io/prodix-fe/build/",
+  "homepage": "./build/",
   "name": "prodix-fe",
   "version": "0.1.0",
   "dependencies": {
