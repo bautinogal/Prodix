@@ -1,9 +1,13 @@
 import { useRef, useState, useMemo } from 'react';
 import { Avatar, Box, Button, Grid, Slider, Typography, IconButton, Input } from '@mui/material';
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
 import data from './data';
 
 export default function Main() {
+
+    const [votado, setVotado] = useState(false);
 
     const Votacion = (props) => {
         //"Si la fórmula más votada obtiene más del 45% del voto válidamente emitido o 
@@ -144,13 +148,38 @@ export default function Main() {
                 <Grid item xs={2}>
                     <Button variant="contained"
                         disabled={!values.find(v => v.firstRoundWinner || v.ballotageWinner)}
-                        onClick={() => setValues(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null })))}>Guardar</Button>
+                        onClick={() => setVotado(true)}>Guardar</Button>
                 </Grid>
             </Grid>
         );
     }
 
+    const Resultados = (props) => {
+
+        const results = Array(21).fill(0).map((x, i) => {
+            let res = { name: `${i * 5}%` };
+            data.forEach(d => res[d.lastName] = Math.random() * 400);
+            console.log(res)
+            return res;
+        });
 
 
-    return (<Votacion />);
+        return (<>
+            <AreaChart
+                width={1500}
+                height={800}
+                data={results}
+                margin={{ top: 100, right: 50, left: 50, bottom: 0 }}
+            >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                {data.map(d => <Area type="monotone" dataKey={d.lastName} stackId="1" stroke={d.color} fill={d.color} />)}
+            </AreaChart>
+            <Button variant="contained" onClick={() => setVotado(false)}>Volver</Button>
+        </>)
+    }
+
+    return (votado ? <Resultados /> : <Votacion />);
 }
