@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/prodix-fe/build/static/css/main.073c9b0a.css",
-    "main.js": "/prodix-fe/build/static/js/main.c51eeea0.js",
-    "index.html": "/prodix-fe/build/index.html",
-    "main.073c9b0a.css.map": "/prodix-fe/build/static/css/main.073c9b0a.css.map",
-    "main.c51eeea0.js.map": "/prodix-fe/build/static/js/main.c51eeea0.js.map"
+    "main.css": "/prodix-fe/static/css/main.073c9b0a.css",
+    "main.js": "/prodix-fe/static/js/main.c51eeea0.js",
+    "index.html": "/prodix-fe/index.html",
+    "main.073c9b0a.css.map": "/prodix-fe/static/css/main.073c9b0a.css.map",
+    "main.c51eeea0.js.map": "/prodix-fe/static/js/main.c51eeea0.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
