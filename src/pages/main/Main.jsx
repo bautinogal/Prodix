@@ -72,13 +72,12 @@ export default function Main() {
 
         return (
             <Grid container spacing={2} padding={'20px'}>
-                <Grid item xs={4}>
+                <Grid item xs={8}>
                     <Typography variant="h6" gutterBottom component="div">{`Prode Elecciones 2023`} </Typography>
                 </Grid>
                 <Grid item xs={2} >
                     <Button variant="outlined" onClick={() => setValues(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null })))}>Reset</Button>
                 </Grid>
-                <Grid item xs={3} />
                 <Grid item xs={12} />
                 <Grid item xs={12}>
                     {values?.map(x =>
@@ -148,8 +147,8 @@ export default function Main() {
                             </Grid>
                         </Grid>) : null}
                 </Grid>
-                <Grid item xs={10} />
-                <Grid item xs={2}>
+                <Grid item xs={9} />
+                <Grid item xs={3}>
                     <Button variant="contained"
                         disabled={!values.find(v => v.firstRoundWinner || v.ballotageWinner)}
                         onClick={() => setVotado(true)}>Guardar</Button>
