@@ -17,11 +17,6 @@ export default function Main() {
 
     const isIOS = iOS();
 
-    const handleChange = (event, newValue) => {
-        if (isIOS && event.type === 'mousedown') return;
-        // Otherwise handle your change event as normal
-    }
-
     const Votacion = (props) => {
         //"Si la fórmula más votada obtiene más del 45% del voto válidamente emitido o 
         //más del 40% con una diferencia mayor al 10% con la fórmula que le sigue en votos"
@@ -30,7 +25,7 @@ export default function Main() {
 
         const handleChangePrimary = (e, x) => {
 
-            if (isIOS && event.type === 'mousedown') return;
+            if (isIOS && e.type === 'mousedown') return;
             const resetBallotage = _values => _values.map(v => ({ ...v, ballotage: null, firstRoundWinner: false, ballotageWinner: false }));
 
             let freePoints = values?.reduce((p, x) => p + (x.autoAdjust ? x.value : 0), 0);
@@ -66,7 +61,7 @@ export default function Main() {
         }
 
         const handleChangeBallotage = (e, x) => {
-            if (isIOS && event.type === 'mousedown') return;
+            if (isIOS && e.type === 'mousedown') return;
             let _values = values.map(d => x.group === d.group ?
                 { ...d, ballotage: e.target.value } :
                 { ...d, ballotage: d.ballotage ? parseFloat((100 - e.target.value).toFixed(2)) : null })
@@ -175,7 +170,7 @@ export default function Main() {
                 <ResponsiveContainer minWidth={'900px'} width="100%" height="95%">
                     <BarChart width={500} height={300} data={results} >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="lastName" fontSize={8} />
+                        <XAxis dataKey="lastName" fontSize={12} />
                         <YAxis />
                         <Tooltip />
                         <Legend />
