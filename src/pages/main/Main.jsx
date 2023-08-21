@@ -1,7 +1,7 @@
 import { useRef, useState, useMemo } from 'react';
 import { Avatar, Box, Button, Grid, Slider, Typography, IconButton, Input } from '@mui/material';
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, BarChart, Legend, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 import data from './data';
 
@@ -62,22 +62,20 @@ export default function Main() {
 
         return (
             <Grid container spacing={2} padding={'20px'}>
-                <Grid item xs={8}>
+                <Grid item xs={4}>
                     <Typography variant="h6" gutterBottom component="div">{`Prode Elecciones 2023`} </Typography>
                 </Grid>
-                <Grid item xs={4} />
-                <Grid item xs={1} >
-                    <Button variant="contained" onClick={() => setValues(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null })))}>Reset</Button>
+                <Grid item xs={2} >
+                    <Button variant="outlined" onClick={() => setValues(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null })))}>Reset</Button>
                 </Grid>
+                <Grid item xs={3} />
                 <Grid item xs={12} />
-                <Grid item xs={1.5} />
-                <Grid item xs={9}>
+                <Grid item xs={12}>
                     {values?.map(x =>
                         <Grid item key={x.group} xs={12}>
                             <Grid container spacing={2}>
-                                <Grid item xs={1} />
-                                <Grid item xs={1}>
-                                    <Avatar src={x.profileURL} sx={{ width: 80, height: 80 }} />
+                                <Grid item xs={2}>
+                                    <Avatar src={x.profileURL} sx={{ width: 60, height: 60 }} />
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Typography variant="h6" gutterBottom component="div">{`${x.lastName}, ${x.name}`} </Typography>
@@ -90,7 +88,7 @@ export default function Main() {
                                         value={x.value}
                                         onChange={e => handleChangePrimary(e, x)} />
                                 </Grid>
-                                <Grid item xs={1}>
+                                <Grid item xs={1.4}>
                                     <Input
                                         value={x.value}
                                         size="small"
@@ -98,25 +96,22 @@ export default function Main() {
                                         inputProps={{ step: 0.1, min: 0, max: 100, type: 'number' }}
                                     />
                                 </Grid>
-                                <Grid item xs={1}>
+                                <Grid item xs={0.6}>
                                     {x.firstRoundWinner ? <EmojiEvents sx={{ color: 'gold' }} /> : null}
                                 </Grid>
                             </Grid>
                         </Grid>)}
                 </Grid>
-                <Grid item xs={1.5} />
                 <Grid item xs={8}>
                     <Typography variant="h6" gutterBottom component="div">{`Ballotage`} </Typography>
                 </Grid>
                 <Grid item xs={4} />
-                <Grid item xs={1.5} />
-                <Grid item xs={9}>
+                <Grid item xs={12}>
                     {values.filter(v => v.ballotage).length === 2 ? values.filter(v => v.ballotage)?.map(x =>
                         <Grid item key={x.group} xs={12}>
                             <Grid container spacing={2}>
-                                <Grid item xs={1} />
-                                <Grid item xs={1}>
-                                    <Avatar src={x.profileURL} sx={{ width: 80, height: 80 }} />
+                                <Grid item xs={2}>
+                                    <Avatar src={x.profileURL} sx={{ width: 60, height: 60 }} />
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Typography variant="h6" gutterBottom component="div">{`${x.lastName}, ${x.name}`} </Typography>
@@ -129,7 +124,7 @@ export default function Main() {
                                         value={x.ballotage}
                                         onChange={e => handleChangeBallotage(e, x)} />
                                 </Grid>
-                                <Grid item xs={1}>
+                                <Grid item xs={1.5}>
                                     <Input
                                         value={x.ballotage}
                                         size="small"
@@ -137,13 +132,12 @@ export default function Main() {
                                         inputProps={{ step: 0.1, min: 0, max: 100, type: 'number' }}
                                     />
                                 </Grid>
-                                <Grid item xs={1}>
+                                <Grid item xs={0.5}>
                                     {x.ballotageWinner ? <EmojiEvents sx={{ color: 'gold' }} /> : null}
                                 </Grid>
                             </Grid>
                         </Grid>) : null}
                 </Grid>
-                <Grid item xs={1.5} />
                 <Grid item xs={10} />
                 <Grid item xs={2}>
                     <Button variant="contained"
@@ -156,29 +150,32 @@ export default function Main() {
 
     const Resultados = (props) => {
 
-        const results = Array(21).fill(0).map((x, i) => {
-            let res = { name: `${i * 5}%` };
-            data.forEach(d => res[d.lastName] = Math.random() * 400);
-            console.log(res)
-            return res;
-        });
+        const results = data
+        .filter(x => !x.autoAdjust)
+        .map(x => ({ ...x, primeraVuelta: Math.round(Math.random() * 30), segundaVuelta: Math.round(Math.random() * 100) }));
 
+        return (
+            <div style={{ padding:'5%', width: "90%", height: "90vh" }}>
+                <ResponsiveContainer  width="100%" height="95%">
+                    <BarChart
+                        width={500}
+                        height={300}
+                        data={results}
+                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="lastName" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="primeraVuelta" fill="#8884d8" />
+                        <Bar dataKey="segundaVuelta" fill="#82ca9d" />
+                    </BarChart>
+                </ResponsiveContainer>
+                <Button variant="contained" onClick={() => setVotado(false)}>Volver</Button>
+            </div>
 
-        return (<>
-            <AreaChart
-                width={1500}
-                height={800}
-                data={results}
-                margin={{ top: 100, right: 50, left: 50, bottom: 0 }}
-            >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                {data.map(d => <Area type="monotone" dataKey={d.lastName} stackId="1" stroke={d.color} fill={d.color} />)}
-            </AreaChart>
-            <Button variant="contained" onClick={() => setVotado(false)}>Volver</Button>
-        </>)
+        )
     }
 
     return (votado ? <Resultados /> : <Votacion />);
