@@ -159,7 +159,7 @@ export default function Main() {
                 <ResponsiveContainer  width="100%" height="95%">
                     <BarChart
                         width={500}
-                        height={300}
+                        height={300} 
                         data={results}
                         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                     >
