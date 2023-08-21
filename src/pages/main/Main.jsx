@@ -156,15 +156,15 @@ export default function Main() {
 
         return (
             <div style={{ padding: '2.5%', width: "95%", height: "90vh" }}>
-                <ResponsiveContainer width="100%" height="95%">
+                <ResponsiveContainer minWidth={'600px'} width="100%" height="95%">
                     <BarChart width={500} height={300} data={results} >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="lastName" />
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="primeraVuelta" fill="#8884d8" />
-                        <Bar dataKey="segundaVuelta" fill="#82ca9d" />
+                        <Bar dataKey="primeraVuelta" label='Primera Vuelta' fill="#8884d8" />
+                        <Bar dataKey="segundaVuelta" label='Segunda Vuelta' fill="#82ca9d" />
                     </BarChart>
                 </ResponsiveContainer>
                 <Button variant="contained" onClick={() => setVotado(false)}>Volver</Button>
