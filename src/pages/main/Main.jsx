@@ -159,7 +159,7 @@ export default function Main() {
                 <ResponsiveContainer minWidth={'900px'} width="100%" height="95%">
                     <BarChart width={500} height={300} data={results} >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="lastName" />
+                        <XAxis dataKey="lastName" fontSize={8}/>
                         <YAxis />
                         <Tooltip />
                         <Legend />
