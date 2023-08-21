@@ -151,18 +151,13 @@ export default function Main() {
     const Resultados = (props) => {
 
         const results = data
-        .filter(x => !x.autoAdjust)
-        .map(x => ({ ...x, primeraVuelta: Math.round(Math.random() * 30), segundaVuelta: Math.round(Math.random() * 100) }));
+            .filter(x => !x.autoAdjust)
+            .map(x => ({ ...x, primeraVuelta: Math.round(Math.random() * 30), segundaVuelta: Math.round(Math.random() * 100) }));
 
         return (
-            <div style={{ padding:'5%', width: "90%", height: "90vh" }}>
-                <ResponsiveContainer  width="100%" height="95%">
-                    <BarChart
-                        width={500}
-                        height={300} 
-                        data={results}
-                        
-                    >
+            <div style={{ padding: '2.5%', width: "95%", height: "90vh" }}>
+                <ResponsiveContainer width="100%" height="95%">
+                    <BarChart width={500} height={300} data={results} >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="lastName" />
                         <YAxis />
