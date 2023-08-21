@@ -156,7 +156,7 @@ export default function Main() {
 
         return (
             <div style={{ padding: '2.5%', width: "95%", height: "90vh" }}>
-                <ResponsiveContainer minWidth={'600px'} width="100%" height="95%">
+                <ResponsiveContainer minWidth={'900px'} width="100%" height="95%">
                     <BarChart width={500} height={300} data={results} >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="lastName" />
