@@ -560,7 +560,7 @@ pre {
 }
 
 #header .header-nav-features:before, #header .header-nav-features:after {
-	background: rgba(0, 0, 0, 0.03);
+
 	content: none;
 	width: 1px;
 	height: 16px;
