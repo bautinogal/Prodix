@@ -1,7 +1,7 @@
 import { useRef, useState, useMemo } from 'react';
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useNavigate } from 'react-router-dom';
-
+import { isIOS } from '../../lib/utils/index.js';
 import data from '../data.js';
 import { Avatar, Box, Button, Grid, Slider, Typography, IconButton, Input } from '@mui/material';
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
@@ -12,8 +12,23 @@ const Votacion = (props) => {
     //más del 40% con una diferencia mayor al 10% con la fórmula que le sigue en votos"
     const { logout, user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
     const [values, setValues] = useState(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null, firstRoundWinner: false })));
-    const isIOS = ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod']
-        .includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+
+    // useEffect(() => {
+    //     if (isAuthenticated) {
+    //         // El usuario está autenticado, ejecuta tu lógica de callback aquí
+    //         fetch('http://localhost:3001/private', {
+    //             headers: {
+    //                 Authorization: `Bearer ${tuTokenDeAcceso}`
+    //             },
+    //             body: {
+
+    //             }
+    //         })
+    //             .then(response => response.json())
+    //             .then(data => console.log(data))
+    //             .catch(error => console.error('Error:', error));
+    //     }
+    // }, [isAuthenticated, user]);
 
     const handleChangePrimary = (e, x) => {
 
