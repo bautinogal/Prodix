@@ -1,42 +1,137 @@
 import { Avatar, Box, Button, Grid, Slider, Typography, IconButton, Input } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import './css/main.css'; 
+import './css/fontawesome-all.min.css'; 
+import './css/noscript.css'; 
+import './css/animate.css';  
+import logo from './img/logo.png'; 
+import logo2 from './img/logo2.png'; 
+import logo3 from './img/logo3.png'; 
+import votodibujo1 from './img/votodibujo1.png'; 
+import votodibujo2 from './img/votodibujo2.png'; 
+import votodibujo3 from './img/votodibujo3.png'; 
+import votodibujo4 from './img/votodibujo4.png'; 
+import votodibujo5 from './img/votodibujo5.png'; 
+
 
 const Landing = (props) => {
     const history = useNavigate();
 
-    return (<div>
-        <div style={{ textAlign: 'center' }} >
-            <p>Crear una aplicación de pronóstico electoral que sea accesible y fácil de entender para los usuarios es una excelente idea para fomentar la participación cívica y ofrecer una ventana al sentir popular. Aquí te dejo algunas ideas sobre cómo podrías explicar tu app de una manera amigable:</p>
-            <h1>Prodix</h1>
-            <p>"Inmersión en la democracia desde tu móvil. ¡Haz tu pronóstico electoral y compara con el sentir nacional!"</p>
-            <h3>Funcionalidades Clave</h3>
-            <ol>
-                <li>
-                    <strong>Haz tu Pronóstico</strong>: Elige a tus candidatos favoritos en cada categoría y comparte tus predicciones.
-                </li>
-                <li>
-                    <strong>Estadísticas en Tiempo Real</strong>: Ve cómo se inclina la balanza según las predicciones de otros usuarios.
-                </li>
-                <li>
-                    <strong>Información de Candidatos</strong>: Conoce más sobre quienes se postulan para cargos públicos.
-                </li>
-                <li>
-                    <strong>Foros de Discusión</strong>: Participa en debates saludables y bien moderados con otros ciudadanos.
-                </li>
-                <li><strong>Seguridad y Anonimato</strong>: Tus datos están seguros y tu participación es anónima.
-                </li>
-            </ol>
-            <h3>Cómo Usarla</h3>
-            <p>"Una vez que descargues la app, podrás ingresar de manera anónima o crear un perfil para guardar tus pronósticos. Luego, simplemente sigue los pasos para hacer tu pronóstico y participar en discusiones."</p>
-            <h3>Llamado a la Acción</h3>
-            <p>"¿Quieres ser parte del pulso democrático de tu país? ¡Descarga [nombre de la app] y haz oír tu voz!"</p>
-            <h3>Invitación a Compartir</h3>
-            <p>"Si te gusta la app, ¡compártela con amigos y familia para que más voces sean escuchadas!"</p>
-            <p>Recuerda que la transparencia y la privacidad son cruciales cuando se trata de temas políticos, así que asegúrate de tener una política de privacidad sólida y fácil de entender.</p>
-            <p>Espero que estas ideas te sean de ayuda y te deseo mucho éxito con tu proyecto.</p>
-            <Button variant="contained" onClick={() => history('/votacion')}>Comenzar</Button>
+    return (
+        <div id="wrapper" className="divided">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+		<link rel="shortcut icon" href="img/logo3.png" type="image/x-icon" />
+
+            <section className="wrapper style1 align-left"> 
+                <div className="inner row">
+                    <div class="col-6 left-aligned" style={{padding:0}}>
+                        <a href="#">
+                            <img src={logo2} alt="logo"  height="80" />
+                        </a>
+                    </div>
+                    <div className='col-6'>
+                        <ul className="icons right-aligned" style={{marginTop:15}}>
+                            <li><a href="#" className="icon style2 fa-user content-align-right"><span className="label">User</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section className="fadeIn spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
+                <div className="content">
+                    <p className="major" style={{}}>¿Quién tiene la posta?</p>
+                    
+                    <h1 className='bold'>¡Hacé tu pronóstico electoral y compará con el sentir nacional!</h1>
+                    <ul className="actions stacked">
+                        <li><a href="#first" className="button big wide smooth-scroll-middle bold mainbtn">Jugar</a></li>
+                    </ul>
+                </div>
+                <div className="image back-in-right">
+                    <img src={votodibujo1} alt="votodibujo1" />
+                </div>
+            </section>
+    
+            <section className="section-mt fadeIn spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in" id="first">
+                <div className="content">
+                    <h2 className='bold' >¿Cómo funciona Prodix?</h2>
+                    <ul className="actions stacked">
+                        <li><p><span className='subtitle'>1. Registrate o Iniciá sesión</span> <br /> Abre la aplicación e inicia sesión con tu cuenta si ya tienes una, o regístrate si eres un nuevo usuario.</p></li>
+                        <li><p><span className='subtitle'>2. Hacé tu pronóstico</span> <br /> Selecciona tu elección de candidatos para cada categoría electoral, como presidente, gobernador, alcalde, etc. Puedes hacerlo de manera anónima o con tu perfil registrado.</p></li>
+                        <li><p><span className='subtitle'>3. Explorá las estadísticas</span> <br /> Accede a la sección de "Estadísticas en Tiempo Real" para ver cómo se están inclinando las predicciones de otros usuarios. Esto te dará una idea del sentimiento popular.</p></li>
+                        <li><p><span className='subtitle'>4. Compartí y participá por un premio</span> <br /> Continúa utilizando la aplicación para hacer seguimiento de las tendencias electorales y participar activamente en la comunidad electoral.</p></li>
+                       
+                    </ul>
+                     <ul className="actions stacked">
+                        <li><a href="#" className="mainbtn button bold wide">Jugar</a></li>
+                    </ul>
+                </div>
+                <div className="image back-in-left">
+                    <img src={votodibujo2} alt="" />
+                </div>
+            </section>
+    
+            <section className="section-mt fadeIn spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
+                <div className="content">
+                    <h2 className='bold' >¿Cuál es el objetivo de Prodix?</h2>
+                    <ul className="actions stacked">
+                        <li><i class="fas fa-lg fa-check check-color"></i>Fomentar la participación cívica</li>
+                        <li><i class="fas fa-lg fa-check check-color"></i>Facilitar la toma de decisiones informadas</li>
+                        <li><i class="fas fa-lg fa-check check-color"></i>Promover la discusión saludable</li>
+                        <li><i class="fas fa-lg fa-check check-color"></i>Evaluar el sentimiento popular</li>
+                        <li><i class="fas fa-lg fa-check check-color"></i>Revalorizar el interés en la democracia</li>
+                    </ul>
+                    <ul className="actions stacked">
+                        <li><a href="#" className="mainbtn button bold wide">Jugar</a></li>
+                    </ul>
+                </div>
+                <div className="image back-in-right">
+                    <img src={votodibujo3} alt="" />
+                </div>
+            </section>
+
+            <section className="section-mt fadeIn spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in">
+                <div className="content">
+                    <ul className="actions stacked">
+                        <li><p><span className='subtitle'>Hacé tu pronóstico</span> <br /> Con tu predicción de cuantos puntos va a tener cada candidato participás por un premio!</p></li>
+                        <li><p><span className='subtitle'>Estadísticas en tiempo real</span> <br /> Con tu predicción de cuantos puntos va a tener cada candidato participás por un premio!</p></li>
+                        <li><p><span className='subtitle'>Información de las elecciones</span> <br /> Conoce más sobre quiénes se postulan y cómo funciona el proceso democrático</p></li>
+                        <li><p><span className='subtitle'>Foros de discusión</span> <br /> Participa en debates saludables y bien moderados con otros ciudadanos</p></li>
+                        <li><p><span className='subtitle'>Seguro y anónimo</span> <br /> Tus datos están seguros y tu participación puede ser anónima.</p></li>
+               
+                    </ul>
+                    <ul className="actions stacked">
+                        <li><a href="#" className="mainbtn button bold wide">Jugar</a></li>
+                    </ul>
+                </div>
+                <div className="content back-in-left">
+                    <img src={votodibujo4} alt="" style={{ width: '80%', margin:'3em' }} />
+                </div>
+            </section>
+
+            <section className="section-mt fadeIn wrapper style1 align-center">
+                <div className="inner">
+                    <h2 className='bold' >¿Quieres ser parte del pulso democrático de tu país?</h2>
+                    <p className='subtitle'>Sumá tu predicción a Prodix</p>
+                    <div className="image back-in-right" style={{display:'flex',justifyContent:'center'}}>
+                        <img src={votodibujo5} alt="" style={{ width: '95%' }} />
+                    </div>
+                    <ul className="actions stacked">
+                        <li><a href="#" className="mainbtn button bold wide">HACÉ TU PREDICCIÓN</a></li>
+                    </ul>
+                </div>
+
+            </section>
+        
+            <section className="fadeIn wrapper style1 align-center">
+                <div className="inner medium">
+                    <h5>&copy; Todos los derechos reservados 2023</h5>
+                </div>
+            </section>
+
         </div>
-    </div>)
+   )
 }
 
-export default Landing
+export default Landing  
