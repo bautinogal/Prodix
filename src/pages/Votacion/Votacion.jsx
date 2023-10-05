@@ -1,10 +1,11 @@
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState, useMemo, useEffect } from 'react';
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useNavigate } from 'react-router-dom';
 import { isIOS } from '../../lib/utils/index.js';
 import data from '../data.js';
-import { Avatar, Box, Button, Grid, Slider, Typography, IconButton, Input } from '@mui/material';
+import { Avatar, Box, Button, Dialog, DialogTitle, DialogContent, Grid, Slider, Step, StepLabel, Stepper, Typography, IconButton, Input } from '@mui/material';
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
+import './Votacion.css';
 
 const Votacion = (props) => {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ const Votacion = (props) => {
     //más del 40% con una diferencia mayor al 10% con la fórmula que le sigue en votos"
     const { logout, user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
     const [values, setValues] = useState(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null, firstRoundWinner: false })));
-
+    const [openTutorial, setOpenTutorial] = useState(true);
     // useEffect(() => {
     //     if (isAuthenticated) {
     //         // El usuario está autenticado, ejecuta tu lógica de callback aquí
@@ -77,8 +78,73 @@ const Votacion = (props) => {
         setValues(_values)
     }
 
-    return (
+    const TutorialVotacion = () => {
+        const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+        const [activeStep, setActiveStep] = useState(0);
+        const [skipped, setSkipped] = useState(new Set());
+
+        const handleNext = () => {
+            let newSkipped = skipped;
+            if (skipped.has(activeStep)) {
+                newSkipped = new Set(newSkipped.values());
+                newSkipped.delete(activeStep);
+            }
+
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setSkipped(newSkipped);
+        };
+
+        const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+        const handleSkip = () => {
+            if (activeStep !== 1) throw new Error("You can't skip a step that isn't optional.");
+
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setSkipped((prevSkipped) => {
+                const newSkipped = new Set(prevSkipped.values());
+                newSkipped.add(activeStep);
+                return newSkipped;
+            });
+        };
+
+        return <Dialog className="dialog-background" onClose={e => setOpenTutorial(false)} open={openTutorial} fullWidth maxWidth='80vw'>
+            <DialogTitle>Tutorial De Votación</DialogTitle>
+            <DialogContent sx={{ height: '80vh' }}>
+                <Box sx={{ height: '60vh', textAlign: 'center' }} children={<img maxWidth={'100%'} height={'90%'} src="./src/landing_mai/img/votodibujo2.png" alt="Descripción" />} />
+                <Box sx={{ width: '100%' }} color={'white'}>
+                    <Stepper activeStep={activeStep}>
+                        {steps.map((label, index) => {
+                            const stepProps = {};
+                            const labelProps = {};
+                            if (index === 1) labelProps.optional = (<Typography variant="caption">Optional</Typography>);
+                            if (skipped.has(index)) stepProps.completed = false;
+                            return (<Step key={label} {...stepProps} children={<StepLabel olor='white'  {...labelProps} children={label} />} />);
+                        })}
+                    </Stepper>
+                    {activeStep === steps.length ? (<>
+                        <Typography sx={{ mt: 2, mb: 1 }} children='All steps completed - you&apos;re finished' />
+                        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }} children={<>
+                            <Box sx={{ flex: '1 1 auto' }} />
+                            <Button onClick={e => setActiveStep(0)}>Reset</Button>
+                        </>} />
+                    </>) : (<>
+                        <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                            <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }} children={'Back'} />
+                            <Box sx={{ flex: '1 1 auto' }} />
+                            {activeStep === 1 && (<Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }} children={'Skip'} />)}
+                            <Button onClick={handleNext} children={activeStep === steps.length - 1 ? 'Finish' : 'Next'} />
+                        </Box>
+                    </>)}
+                </Box>
+            </DialogContent>
+        </Dialog>
+    }
+
+    return (<>
+        <TutorialVotacion />
         <Grid container spacing={2} padding={'20px'}>
+
             <Grid item xs={8}>
                 <Typography variant="h6" gutterBottom component="div">{`Prode Elecciones 2023`} </Typography>
             </Grid>
@@ -161,7 +227,7 @@ const Votacion = (props) => {
                     onClick={() => navigate('/resultados')}>Guardar</Button>
             </Grid>
         </Grid>
-    );
+    </>);
 }
 
 export default withAuthenticationRequired(Votacion, { onRedirecting: () => <h1>Redireccionando</h1> });

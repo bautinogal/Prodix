@@ -1,0 +1,8 @@
+.dialog-background > .MuiDialog-container {
+    background-color: rgba(82, 82, 82, 0.494) !important;
+}
+
+.dialog-background  > .MuiDialog-container > .MuiPaper-root {
+    background-color: rgba(193, 193, 193, 0) !important;
+    box-shadow: none !important;
+}
