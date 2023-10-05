@@ -4095,12 +4095,6 @@
   justify-content: flex-end;
 }
 
-
-.left-aligned {
-  display: flex;
-  justify-content: flex-start;
-}
-
 @keyframes backInRight {
   0% {
       transform: translateX(2000px) scaleX(2) scaleY(0.7);

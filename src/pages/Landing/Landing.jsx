@@ -1,12 +1,11 @@
 import { Avatar, Box, Button, Grid, Slider, Typography, IconButton, Input } from '@mui/material';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './css/main.css'; 
 import './css/fontawesome-all.min.css'; 
 import './css/noscript.css'; 
 import './css/animate.css';  
-import logo from './img/logo.png'; 
 import logo4 from './img/logo4.png'; 
-import logo3 from './img/logo3.png'; 
 import votodibujo1 from './img/votodibujo1.png'; 
 import votodibujo2 from './img/votodibujo2.png'; 
 import votodibujo3 from './img/votodibujo3.png'; 
@@ -16,6 +15,25 @@ import votodibujo5 from './img/votodibujo5.png';
 
 const Landing = (props) => {
     const history = useNavigate();
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const elementos = document.querySelectorAll('.item');
+
+            elementos.forEach((elemento) => {
+                const rect = elemento.getBoundingClientRect();
+                if (rect.top < window.innerHeight) {
+                    elemento.classList.add('animated');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
         <div id="wrapper" className="divided">
@@ -40,7 +58,7 @@ const Landing = (props) => {
             </section>
 
             <section className="fadeIn spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
-                <div className="content">
+                <div className="content back-in-left">
                     <p className="major" style={{}}>¿Quién tiene la posta?</p>
                     
                     <h1 className='bold'>¡Hacé tu pronóstico electoral y compará con el sentir nacional!</h1>
@@ -48,13 +66,13 @@ const Landing = (props) => {
                         <li><a href="#first" className="button big wide smooth-scroll-middle bold mainbtn">Jugar</a></li>
                     </ul>
                 </div>
-                <div className="image back-in-right">
+                <div className="itemfloat image">
                     <img src={votodibujo1} alt="votodibujo1" />
                 </div>
             </section>
     
-            <section className="section-mt fadeIn spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in" id="first">
-                <div className="content">
+            <section className="bgsection section-mt fadeIn spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in" id="first">
+                <div className="content back-in-right">
                     <h2 className='bold' >¿Cómo funciona Prodix?</h2>
                     <ul className="actions stacked">
                         <li><p><span className='subtitle'>1. Registrate o Iniciá sesión</span> <br /> Abre la aplicación e inicia sesión con tu cuenta si ya tienes una, o regístrate si eres un nuevo usuario.</p></li>
@@ -67,13 +85,13 @@ const Landing = (props) => {
                         <li><a href="#" className="mainbtn button bold wide">Jugar</a></li>
                     </ul>
                 </div>
-                <div className="image back-in-left">
+                <div className="image itemfloat">
                     <img src={votodibujo2} alt="" />
                 </div>
             </section>
-    
+
             <section className="section-mt fadeIn spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
-                <div className="content">
+                <div className="content back-in-left">
                     <h2 className='bold' >¿Cuál es el objetivo de Prodix?</h2>
                     <ul className="actions stacked">
                         <li><i class="fas fa-lg fa-check check-color"></i>Fomentar la participación cívica</li>
@@ -86,14 +104,14 @@ const Landing = (props) => {
                         <li><a href="#" className="mainbtn button bold wide">Jugar</a></li>
                     </ul>
                 </div>
-                <div className="image back-in-right">
+                <div className="image itemfloat">
                     <img src={votodibujo3} alt="" />
                 </div>
             </section>
 
-            <section className="section-mt fadeIn spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in">
+            <section className="bgsection2 section-mt fadeIn spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in">
                 <div className="content">
-                    <ul className="actions stacked">
+                    <ul className="actions stacked back-in-right">
                         <li><p><span className='subtitle'>Hacé tu pronóstico</span> <br /> Con tu predicción de cuantos puntos va a tener cada candidato participás por un premio!</p></li>
                         <li><p><span className='subtitle'>Estadísticas en tiempo real</span> <br /> Con tu predicción de cuantos puntos va a tener cada candidato participás por un premio!</p></li>
                         <li><p><span className='subtitle'>Información de las elecciones</span> <br /> Conoce más sobre quiénes se postulan y cómo funciona el proceso democrático</p></li>
@@ -105,7 +123,7 @@ const Landing = (props) => {
                         <li><a href="#" className="mainbtn button bold wide">Jugar</a></li>
                     </ul>
                 </div>
-                <div className="content back-in-left">
+                <div className="content itemfloat">
                     <img src={votodibujo4} alt="" style={{ width: '80%', margin:'3em' }} />
                 </div>
             </section>
@@ -114,7 +132,7 @@ const Landing = (props) => {
                 <div className="inner">
                     <h2 className='bold' >¿Quieres ser parte del pulso democrático de tu país?</h2>
                     <p className='subtitle'>Sumá tu predicción a Prodix</p>
-                    <div className="image back-in-right" style={{display:'flex',justifyContent:'center'}}>
+                    <div className="image itemfloat" style={{display:'flex',justifyContent:'center'}}>
                         <img src={votodibujo5} alt="" style={{ width: '95%' }} />
                     </div>
                     <ul className="actions stacked">

@@ -2614,7 +2614,7 @@ input, select, textarea {
 	}
 
 	a.icon.style2:hover:before {
-		box-shadow: inset 0 0 0 1px #47D3E5;
+		box-shadow: inset 0 0 0 1.5px #47D3E5;
 		color: #47D3E5;
 	}
 
@@ -8431,7 +8431,7 @@ input, select, textarea {
 			}
 
 			#wrapper > .invert a.icon.style2:hover:before {
-				box-shadow: inset 0 0 0 1px #47D3E5;
+				box-shadow: inset 0 0 0 1.5px #47D3E5;
 				color: #47D3E5;
 			}
 
@@ -8660,4 +8660,35 @@ input, select, textarea {
 	.section-mt {
 		margin-top: 2em;
 	}
+}
+
+.bgsection {
+	background-image: url('../img/bg.png');
+    background-size: cover; /* Ajusta el tamaño de la imagen al contenedor */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-position: center center; /* Centra la imagen en el contenedor */
+    min-height: 300px; 
+}
+
+.bgsection2 {
+	background-image: url('../img/bg2.png');
+    background-size: cover; /* Ajusta el tamaño de la imagen al contenedor */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-position: center center; /* Centra la imagen en el contenedor */
+    min-height: 300px; 
+}
+
+
+@keyframes moveUp {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-20px); /* Ajusta la distancia de desplazamiento */
+    }
+}
+
+.itemfloat {
+    /* Estilos base para los elementos */
+    animation: moveUp 2s alternate infinite; /* Aplica la animación a los elementos */
 }
