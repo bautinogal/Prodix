@@ -5,7 +5,7 @@ import './css/fontawesome-all.min.css';
 import './css/noscript.css'; 
 import './css/animate.css';  
 import logo from './img/logo.png'; 
-import logo2 from './img/logo2.png'; 
+import logo4 from './img/logo4.png'; 
 import logo3 from './img/logo3.png'; 
 import votodibujo1 from './img/votodibujo1.png'; 
 import votodibujo2 from './img/votodibujo2.png'; 
@@ -28,12 +28,12 @@ const Landing = (props) => {
                 <div className="inner row">
                     <div class="col-6 left-aligned" style={{padding:0}}>
                         <a href="#">
-                            <img src={logo2} alt="logo"  height="80" />
+                            <img src={logo4} alt="logo"  height="80" />
                         </a>
                     </div>
                     <div className='col-6'>
                         <ul className="icons right-aligned" style={{marginTop:15}}>
-                            <li><a href="#" className="icon style2 fa-user content-align-right"><span className="label">User</span></a></li>
+                            <li><a href="#" className="icon style2 fa-user fa-solid content-align-right"><span className="label">User</span></a></li>
                         </ul>
                     </div>
                 </div>
