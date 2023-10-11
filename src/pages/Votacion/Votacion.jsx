@@ -142,7 +142,7 @@ const Votacion = (props) => {
     }
 
     return (<>
-        <TutorialVotacion />
+        {/* <TutorialVotacion /> */}
         <Grid container spacing={2} padding={'20px'}>
 
             <Grid item xs={8}>
@@ -166,7 +166,7 @@ const Votacion = (props) => {
                                 <Slider
                                     style={{ color: x.color }}
                                     step={0.01}
-                                    valueLabelDisplay="on"
+                                    //valueLabelDisplay="on"
                                     value={x.value}
                                     onChange={e => handleChangePrimary(e, x)} />
                             </Grid>
@@ -202,7 +202,7 @@ const Votacion = (props) => {
                                 <Slider
                                     style={{ color: x.color }}
                                     step={0.01}
-                                    valueLabelDisplay="on"
+                                    //valueLabelDisplay="on"
                                     value={x.ballotage}
                                     onChange={e => handleChangeBallotage(e, x)} />
                             </Grid>
@@ -230,4 +230,6 @@ const Votacion = (props) => {
     </>);
 }
 
-export default withAuthenticationRequired(Votacion, { onRedirecting: () => <h1>Redireccionando</h1> });
+
+//export default Votacion;
+export default withAuthenticationRequired(Votacion, { onRedirecting: () => <h1>Redireccionando</h1>, returnTo: '/votacion'});
