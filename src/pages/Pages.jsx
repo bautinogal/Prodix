@@ -9,7 +9,7 @@ export default function Main() {
     const { logout, user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
     return (<Routes>
-        {/* <Route exact path="/resultados" element={<Resultados />} />*/}
+        <Route exact path="/resultados" element={<Resultados />} />
         <Route exact path="/votacion" element={<Votacion />} />
         <Route exact path="/" element={<Landing />} />
     </Routes>)
