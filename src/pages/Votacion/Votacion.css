@@ -6,3 +6,20 @@
     background-color: rgba(193, 193, 193, 0) !important;
     box-shadow: none !important;
 }
+
+.botton-text {
+    /* color: rgba(176, 176, 176, 255) !important; */
+    margin: '0.5em';
+    font-weight: 800 !important;
+}
+
+.botton-resetear {
+    color: #2ab4ff !important;
+}
+
+
+.botton-guardar {
+    background-color: #9ee8fb00 !important;
+    color: #2ab4ff !important;
+    padding: 1em  !important;
+}

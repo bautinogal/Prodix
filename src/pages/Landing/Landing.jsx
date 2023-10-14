@@ -18,10 +18,10 @@ const Landing = (props) => {
     const { loginWithRedirect } = useAuth0();
     const onJugar = () => loginWithRedirect({ appState: { returnTo: "/votacion", } });
 
+    //Animación de las imagenes
     useEffect(() => {
         const handleScroll = () => {
             const elementos = document.querySelectorAll('.item');
-
             elementos.forEach((elemento) => {
                 const rect = elemento.getBoundingClientRect();
                 if (rect.top < window.innerHeight) {
