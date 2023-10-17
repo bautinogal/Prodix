@@ -1,5 +1,6 @@
 import { Avatar, Box, Button, Grid, Slider, Typography, IconButton, Input } from '@mui/material';
 import React, { useEffect } from 'react';
+import history from "../../lib/utils/history.js";
 import { useNavigate } from 'react-router-dom';
 import './css/main.css'; 
 import './css/fontawesome-all.min.css'; 
@@ -11,15 +12,16 @@ import votodibujo2 from './img/votodibujo2.png';
 import votodibujo3 from './img/votodibujo3.png'; 
 import votodibujo4 from './img/votodibujo4.png'; 
 import votodibujo5 from './img/votodibujo5.png'; 
-
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Landing = (props) => {
-    const history = useNavigate();
+    const { loginWithRedirect } = useAuth0();
+    const onJugar = () => loginWithRedirect({ appState: { returnTo: "/votacion", } });
 
+    //Animación de las imagenes
     useEffect(() => {
         const handleScroll = () => {
             const elementos = document.querySelectorAll('.item');
-
             elementos.forEach((elemento) => {
                 const rect = elemento.getBoundingClientRect();
                 if (rect.top < window.innerHeight) {
@@ -37,14 +39,13 @@ const Landing = (props) => {
 
     return (
         <div id="wrapper" className="divided">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 		<link rel="shortcut icon" href="img/logo3.png" type="image/x-icon" />
-
             <section className="wrapper style1 align-left"> 
                 <div className="inner row">
-                    <div class="col-6 left-aligned" style={{padding:0}}>
+                    <div className="col-6 left-aligned" style={{padding:0}}>
                         <a href="#">
                             <img src={logo4} alt="logo"  height="80" />
                         </a>
@@ -63,7 +64,7 @@ const Landing = (props) => {
                     
                     <h1 className='bold'>¡Hacé tu pronóstico electoral y compará con el sentir nacional!</h1>
                     <ul className="actions stacked">
-                        <li><a href="#first" className="button big wide smooth-scroll-middle bold mainbtn">Jugar</a></li>
+                        <li><a  onClick={onJugar} className="button big wide smooth-scroll-middle bold mainbtn">Jugar</a></li>
                     </ul>
                 </div>
                 <div className="  image">
@@ -82,7 +83,7 @@ const Landing = (props) => {
                        
                     </ul>
                      <ul className="actions stacked">
-                        <li><a href="#" className="mainbtn button bold wide">Jugar</a></li>
+                        <li><a href="#" onClick={onJugar}  className="mainbtn button bold wide">Jugar</a></li>
                     </ul>
                 </div>
                 <div className="image  ">
@@ -94,14 +95,14 @@ const Landing = (props) => {
                 <div className="content back-in-left">
                     <h2 className='bold' >¿Cuál es el objetivo de Prodix?</h2>
                     <ul className="actions stacked">
-                        <li><i class="fas fa-lg fa-check check-color"></i>Fomentar la participación cívica</li>
-                        <li><i class="fas fa-lg fa-check check-color"></i>Facilitar la toma de decisiones informadas</li>
-                        <li><i class="fas fa-lg fa-check check-color"></i>Promover la discusión saludable</li>
-                        <li><i class="fas fa-lg fa-check check-color"></i>Evaluar el sentimiento popular</li>
-                        <li><i class="fas fa-lg fa-check check-color"></i>Revalorizar el interés en la democracia</li>
+                        <li><i className="fas fa-lg fa-check check-color"></i>Fomentar la participación cívica</li>
+                        <li><i className="fas fa-lg fa-check check-color"></i>Facilitar la toma de decisiones informadas</li>
+                        <li><i className="fas fa-lg fa-check check-color"></i>Promover la discusión saludable</li>
+                        <li><i className="fas fa-lg fa-check check-color"></i>Evaluar el sentimiento popular</li>
+                        <li><i className="fas fa-lg fa-check check-color"></i>Revalorizar el interés en la democracia</li>
                     </ul>
                     <ul className="actions stacked">
-                        <li><a href="#" className="mainbtn button bold wide">Jugar</a></li>
+                        <li><a href="#" onClick={onJugar}  className="mainbtn button bold wide">Jugar</a></li>
                     </ul>
                 </div>
                 <div className="image  ">
@@ -117,7 +118,6 @@ const Landing = (props) => {
                         <li><p><span className='subtitle'>Información de las elecciones</span> <br /> Conoce más sobre quiénes se postulan y cómo funciona el proceso democrático</p></li>
                         <li><p><span className='subtitle'>Foros de discusión</span> <br /> Participa en debates saludables y bien moderados con otros ciudadanos</p></li>
                         <li><p><span className='subtitle'>Seguro y anónimo</span> <br /> Tus datos están seguros y tu participación puede ser anónima.</p></li>
-               
                     </ul>
                     <ul className="actions stacked">
                         <li><a href="#" className="mainbtn button bold wide">Jugar</a></li>

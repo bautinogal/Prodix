@@ -113,8 +113,10 @@ export const capitalize = (str) => {
 
 export const centsToPesos = (cents) => '$' + new Intl.NumberFormat('es-ES').format(cents / 100);
 
+export const isIOS = ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'] .includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+
 export default {
-  ..._, refReplacer,
+  ..._, refReplacer, isIOS,
   randomNumber, randomInt, randomChances, randomString,
   secondInMilli, minuteInMilli, hourInMilli, dayInMilli, randomDate,
   toPascalCase, toCamelCase, keysToPC, keysToCC, timeout, centsToPesos
