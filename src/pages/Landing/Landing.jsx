@@ -13,6 +13,7 @@ import votodibujo3 from './img/votodibujo3.png';
 import votodibujo4 from './img/votodibujo4.png'; 
 import votodibujo5 from './img/votodibujo5.png'; 
 import { useAuth0 } from "@auth0/auth0-react";
+import loginbg from './img/login_bg.png'; 
 
 const Landing = (props) => {
     const { loginWithRedirect } = useAuth0();
