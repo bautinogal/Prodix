@@ -2,10 +2,10 @@ import { Avatar, Box, Button, Grid, Slider, Typography, IconButton, Input } from
 import React, { useEffect } from 'react';
 import history from "../../lib/utils/history.js";
 import { useNavigate } from 'react-router-dom';
-import './css/main.css'; 
-import './css/fontawesome-all.min.css'; 
-import './css/noscript.css'; 
-import './css/animate.css';  
+import '../styles/main.css'; 
+import '../styles/fontawesome-all.min.css'; 
+import '../styles/noscript.css'; 
+import '../styles/animate.css';  
 import logo4 from './img/logo4.png'; 
 import votodibujo1 from './img/votodibujo1.png'; 
 import votodibujo2 from './img/votodibujo2.png'; 

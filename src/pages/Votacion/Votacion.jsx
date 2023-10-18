@@ -3,6 +3,10 @@ import { useRef, useState, useMemo, useEffect } from 'react';
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useNavigate } from 'react-router-dom';
 import { isIOS } from '../../lib/utils/index.js';
+import '../styles/main.css'; 
+import '../styles/fontawesome-all.min.css'; 
+import '../styles/noscript.css'; 
+import '../styles/animate.css'; 
 import data from '../data.js';
 import {
     Avatar, Badge, Backdrop, Box, Button, CircularProgress, Dialog, DialogTitle, DialogContent, Grid, Slider, Step, StepLabel, Stepper,
@@ -180,7 +184,7 @@ const Votacion = (props) => {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
         {/* <TutorialVotacion /> */}
         <div>
-            <Backdrop open={isLoading || loading > 0} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} >
+            <Backdrop open={false} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} >
                 <CircularProgress color="inherit" />
             </Backdrop>
         </div>
