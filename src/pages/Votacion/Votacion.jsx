@@ -206,10 +206,10 @@ const Votacion = (props) => {
                                     <Avatar src={x.profileURL} sx={{ width: '7vh', height: '7vh' }} />
                                 </Badge>
                             </Grid>
-                            <Grid item xs={4}>
-                                <Typography variant="h6" overflow={'clip'} fontSize={'3vh'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
+                            <Grid item xs={3}>
+                                <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <Slider
                                     style={{ color: x.color}}
                                     step={0.01}
@@ -217,7 +217,7 @@ const Votacion = (props) => {
                                     value={x.value}
                                     onChange={e => handleChangePrimary(e, x)} />
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={4}>
                                 <Input
                                     style={{marginLeft:'1em'}}
                                     value={x.value}
@@ -244,15 +244,15 @@ const Votacion = (props) => {
                                 </Badge>
 
                             </Grid>
-                            <Grid item xs={4}>
-                                <Typography variant="h6" overflow={'clip'} fontSize={'3vh'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
+                            <Grid item xs={3}>
+                                <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <Slider style={{ color: x.color }} step={0.01}
                                     //valueLabelDisplay="on"
                                     value={x.ballotage} onChange={e => handleChangeBallotage(e, x)} />
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={4}>
                                 <Input
                                     style={{marginLeft:'1em'}}
                                     value={x.ballotage}
