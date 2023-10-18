@@ -1,9 +1,13 @@
+import env from '../../config/env.js';
 import { useRef, useState, useMemo, useEffect } from 'react';
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useNavigate } from 'react-router-dom';
 import { isIOS } from '../../lib/utils/index.js';
 import data from '../data.js';
-import { Avatar, Badge, Box, Button, Dialog, DialogTitle, DialogContent, Grid, Slider, Step, StepLabel, Stepper, Typography, IconButton, Input } from '@mui/material';
+import {
+    Avatar, Badge, Backdrop, Box, Button, CircularProgress, Dialog, DialogTitle, DialogContent, Grid, Slider, Step, StepLabel, Stepper,
+    Typography, IconButton, Input
+} from '@mui/material';
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
 import './Votacion.css';
 import '../Landing/css/main.css';
@@ -11,30 +15,16 @@ import '../Landing/css/fontawesome-all.min.css';
 import '../Landing/css/noscript.css';
 import '../Landing/css/animate.css';
 import logo4 from '../Landing/img/logo4.png';
+import axios from 'axios';
 
+//"Si la fórmula más votada obtiene más del 45% del voto válidamente emitido o 
+//más del 40% con una diferencia mayor al 10% con la fórmula que le sigue en votos"
 const Votacion = (props) => {
     const navigate = useNavigate();
-    //"Si la fórmula más votada obtiene más del 45% del voto válidamente emitido o 
-    //más del 40% con una diferencia mayor al 10% con la fórmula que le sigue en votos"
-    const { logout, user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+    const { logout, user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
     const [values, setValues] = useState(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null, firstRoundWinner: false })));
     const [openTutorial, setOpenTutorial] = useState(true);
-    // useEffect(() => {
-    //     if (isAuthenticated) {
-    //         // El usuario está autenticado, ejecuta tu lógica de callback aquí
-    //         fetch('http://localhost:3001/private', {
-    //             headers: {
-    //                 Authorization: `Bearer ${tuTokenDeAcceso}`
-    //             },
-    //             body: {
-
-    //             }
-    //         })
-    //             .then(response => response.json())
-    //             .then(data => console.log(data))
-    //             .catch(error => console.error('Error:', error));
-    //     }
-    // }, [isAuthenticated, user]);
+    const [loading, setLoading] = useState(0);
 
     const handleChangePrimary = (e, x) => {
 
@@ -146,6 +136,42 @@ const Votacion = (props) => {
         </Dialog>
     }
 
+    const onLogin = async () => {
+        if (isAuthenticated && user && !isLoading) {
+            console.log('onLogin', loading)
+            setLoading(1);
+            const accessToken = await getAccessTokenSilently().catch(console.error);
+            const { userAgent, hardwareConcurrency: conc, deviceMemory: mem } = navigator;
+            let res = await axios.post(`${env.backendUrl}/login`,
+                { ...user, userAgent, conc, mem },
+                { headers: { 'Authorization': `Bearer ${accessToken}` } })
+                .catch(console.error);
+            console.log(res.data)
+            setValues(res.data)
+            setLoading(0);
+        }
+    }
+
+    const onVotar = async () => {
+        setLoading(1);
+        const accessToken = await getAccessTokenSilently().catch(console.error);
+        const payload = values.map(x => ({
+            name: x.name,
+            lastName: x.lastName,
+            group: x.group,
+            value: parseFloat(x.value.toFixed(2)),
+            ballotage: parseFloat(x.ballotage?.toFixed(2)),
+            firstRoundWinner: x.firstRoundWinner,
+            ballotageWinner: x.ballotageWinner
+        }));
+        let res = await axios.post(`${env.backendUrl}/votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
+        setLoading(0);
+        setVotacion(res);
+        navigate('/resultados');
+    }
+
+    useEffect(() => { onLogin(); }, [isAuthenticated, user]);
+
     return (<div style={{
         backgroundImage: "url(/src/pages/Landing/img/bgWave.png)", backgroundSize: 'cover',
         backgroundRepeatt: 'no-repeat', backgroundAttachment: 'fixed', width: '100%', height: '100%', minHeight: '105vh'
@@ -154,6 +180,11 @@ const Votacion = (props) => {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
         {/* <TutorialVotacion /> */}
+        <div>
+            <Backdrop open={isLoading || loading > 0} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        </div>
         <Grid container spacing={2} padding={'20px'}>
             <Grid item xs={9}>
                 <Typography variant="h6" gutterBottom component="div"><img src={logo4} alt="logo" style={{ height: '2em' }} /> </Typography>
@@ -176,7 +207,7 @@ const Votacion = (props) => {
                     <Grid item key={x.group} xs={12}>
                         <Grid container spacing={2}>
                             <Grid item xs={2}>
-                            <Badge overlap="circular" anchorOrigin={{ vertical: 'top', horizontal: 'right', }}
+                                <Badge overlap="circular" anchorOrigin={{ vertical: 'top', horizontal: 'right', }}
                                     badgeContent={<EmojiEvents style={{ fontSize: x.firstRoundWinner ? '3.5vh' : '0', color: 'gold', }} />}  >
                                     <Avatar src={x.profileURL} sx={{ width: '7vh', height: '7vh' }} />
                                 </Badge>
@@ -244,7 +275,7 @@ const Votacion = (props) => {
                 </Button> */}
                 <Button variant="contained" className='botton-text botton-guardar'
                     disabled={!values.find(v => v.firstRoundWinner || v.ballotageWinner)}
-                    onClick={() => navigate('/resultados')}  >
+                    onClick={onVotar}  >
                     Guardar
                 </Button>
             </Grid>

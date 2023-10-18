@@ -7,7 +7,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import themeParams from './theme.js';
 //import { config } from './lib/auth0/index.js'
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
-import { BrowserRouter , useNavigate} from "react-router-dom";
+import { BrowserRouter, useNavigate } from "react-router-dom";
 import env from './config/env.js';
 
 const Auth0ProviderWithNavigate = ({ children }) => {
@@ -16,9 +16,9 @@ const Auth0ProviderWithNavigate = ({ children }) => {
 
   return (
     <Auth0Provider
-      domain={ env.auth0.domain}
+      domain={env.auth0.domain}
       clientId={env.auth0.clientId}
-      authorizationParams={{ redirect_uri: env.auth0.redirectUri }}
+      authorizationParams={{ redirect_uri: env.auth0.redirectUri, audience: env.auth0.audience }}
       onRedirectCallback={(appState) => navigate(appState?.returnTo || window.location.pathname)}
     > {children}
     </Auth0Provider>
