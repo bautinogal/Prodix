@@ -53,7 +53,7 @@ export default [
         profileURL: '',
         logoURL: '',
         name: '',
-        lastName: 'En Blanco',
+        lastName: 'Blanco',
         group: '',
         color: 'grey',
         dfltValue: 100,

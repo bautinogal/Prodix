@@ -2,10 +2,10 @@ import { Avatar, Box, Button, Grid, Slider, Typography, IconButton, Input } from
 import React, { useEffect } from 'react';
 import history from "../../lib/utils/history.js";
 import { useNavigate } from 'react-router-dom';
-import './css/main.css'; 
-import './css/fontawesome-all.min.css'; 
-import './css/noscript.css'; 
-import './css/animate.css';  
+import '../styles/main.css'; 
+import '../styles/fontawesome-all.min.css'; 
+import '../styles/noscript.css'; 
+import '../styles/animate.css';  
 import logo4 from './img/logo4.png'; 
 import votodibujo1 from './img/votodibujo1.png'; 
 import votodibujo2 from './img/votodibujo2.png'; 
@@ -40,8 +40,8 @@ const Landing = (props) => {
 
     return (
         <div id="wrapper" className="divided">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossOrigin="anonymous" referrerPolicy="no-referrer" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 		<link rel="shortcut icon" href="img/logo3.png" type="image/x-icon" />
             <section className="wrapper style1 align-left"> 

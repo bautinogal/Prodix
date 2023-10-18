@@ -3,6 +3,10 @@ import { useRef, useState, useMemo, useEffect } from 'react';
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useNavigate } from 'react-router-dom';
 import { isIOS } from '../../lib/utils/index.js';
+import '../styles/main.css'; 
+import '../styles/fontawesome-all.min.css'; 
+import '../styles/noscript.css'; 
+import '../styles/animate.css'; 
 import data from '../data.js';
 import {
     Avatar, Badge, Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Grid, Slider, Step, StepLabel, Stepper,
@@ -10,12 +14,8 @@ import {
 } from '@mui/material';
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
 import './Votacion.css';
-import '../Landing/css/main.css';
-import '../Landing/css/fontawesome-all.min.css';
-import '../Landing/css/noscript.css';
-import '../Landing/css/animate.css';
 import logo4 from '../Landing/img/logo4.png';
-import '../Landing/img/bgWave.png';
+import bgWave from '../Landing/img/bgWave.png';
 import axios from 'axios';
 
 //"Si la fórmula más votada obtiene más del 45% del voto válidamente emitido o 
@@ -177,8 +177,8 @@ const Votacion = (props) => {
         backgroundImage: "url(/src/pages/Landing/img/bgWave.png)", backgroundSize: 'cover',
         backgroundRepeatt: 'no-repeat', backgroundAttachment: 'fixed', width: '100%', height: '100%', minHeight: '105vh'
     }}>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossOrigin="anonymous" referrerPolicy="no-referrer" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
         {/* <TutorialVotacion /> */}
         <Dialog open={alias == null}  >
@@ -197,30 +197,21 @@ const Votacion = (props) => {
             </DialogActions>
         </Dialog>
         <div>
-            <Backdrop open={isLoading || loading > 0} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} >
+            <Backdrop open={false} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} >
                 <CircularProgress color="inherit" />
             </Backdrop>
         </div>
         <Grid container spacing={2} padding={'20px'}>
             <Grid item xs={9}>
-                <Typography variant="h6" gutterBottom component="div"><img src={logo4} alt="logo" style={{ height: '2em' }} /> </Typography>
-            </Grid>
-            <Grid item xs={3} >
-                <ul className="icons right-aligned">
-                    <li>
-                        <a href="#" className="icon style2 fa-user fa-solid content-align-right">
-                            <span className="label">User</span>
-                        </a>
-                    </li>
-                </ul>
+                <Typography variant="h6" gutterBottom component="div"><img src={logo4} alt="logo" style={{ height: '3em', marginTop: '1em', marginLeft: '1em' }} /> </Typography>
             </Grid>
             <Grid item xs={8}>
-                <Typography variant="h6" gutterBottom component="div">{`PRIMERA VUELTA:`} </Typography>
+                <Typography style={{fontWeight: 'bold',marginLeft: '1em'}} variant="h6" gutterBottom component="div">{`¿Cómo creés que van a ser los resultados de las elecciones?`} </Typography>
             </Grid>
             <Grid item xs={12} />
             <Grid item xs={12}>
                 {values?.map(x =>
-                    <Grid item key={x.group} xs={12}>
+                    <Grid item key={x.group} xs={12} style={{marginLeft:'1em'}}>
                         <Grid container spacing={2}>
                             <Grid item xs={2}>
                                 <Badge overlap="circular" anchorOrigin={{ vertical: 'top', horizontal: 'right', }}
@@ -228,19 +219,20 @@ const Votacion = (props) => {
                                     <Avatar src={x.profileURL} sx={{ width: '7vh', height: '7vh' }} />
                                 </Badge>
                             </Grid>
-                            <Grid item xs={4}>
-                                <Typography variant="h6" overflow={'clip'} fontSize={'3vh'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
+                            <Grid item xs={3}>
+                                <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <Slider
-                                    style={{ color: x.color }}
+                                    style={{ color: x.color}}
                                     step={0.01}
                                     //valueLabelDisplay="on"
                                     value={x.value}
                                     onChange={e => handleChangePrimary(e, x)} />
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={4}>
                                 <Input
+                                    style={{marginLeft:'1em'}}
                                     value={x.value}
                                     size="small"
                                     onChange={e => handleChangePrimary(e, x)}
@@ -250,11 +242,11 @@ const Votacion = (props) => {
                         </Grid>
                     </Grid>)}
             </Grid>
-            <Grid item xs={8}>
-                <Typography variant="h6" gutterBottom component="div">{`BALLOTAGE`} </Typography>
+            <Grid item xs={8} style={{marginTop:'2em'}}>
+                <Typography style={{fontWeight: 'bold',marginLeft: '1em'}} variant="h6" gutterBottom component="div">{`Si hay ballotage sería entre:`} </Typography>
             </Grid>
             <Grid item xs={4} />
-            <Grid item xs={12}>
+            <Grid item xs={12}style={{marginLeft:'1em'}}>
                 {values.filter(v => v.ballotage).length === 2 ? values.filter(v => v.ballotage)?.map(x =>
                     <Grid item key={x.group} xs={12}>
                         <Grid container spacing={2}>
@@ -265,16 +257,17 @@ const Votacion = (props) => {
                                 </Badge>
 
                             </Grid>
-                            <Grid item xs={4}>
-                                <Typography variant="h6" overflow={'clip'} fontSize={'3vh'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
+                            <Grid item xs={3}>
+                                <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <Slider style={{ color: x.color }} step={0.01}
                                     //valueLabelDisplay="on"
                                     value={x.ballotage} onChange={e => handleChangeBallotage(e, x)} />
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={4}>
                                 <Input
+                                    style={{marginLeft:'1em'}}
                                     value={x.ballotage}
                                     size="small"
                                     onChange={e => handleChangeBallotage(e, x)}
@@ -289,11 +282,10 @@ const Votacion = (props) => {
                     onClick={() => navigate('/resultados')} >
                     Resetear
                 </Button> */}
-                <Button variant="contained" className='botton-text botton-guardar'
-                    disabled={!values.find(v => v.firstRoundWinner || v.ballotageWinner)}
-                    onClick={onVotar}  >
-                    Guardar
-                </Button>
+                <ul className="actions stacked">
+                        <li><a disabled={!values.find(v => v.firstRoundWinner || v.ballotageWinner)}
+                    onClick={onVotar}  href="#" className="mainbtn button bold wide" style={{marginRight:'2em',marginBottom:'2em'}}>GUARDAR</a></li>
+                </ul>
             </Grid>
         </Grid>
     </div>);
