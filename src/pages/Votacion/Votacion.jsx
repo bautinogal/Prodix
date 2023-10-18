@@ -14,10 +14,6 @@ import {
 } from '@mui/material';
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
 import './Votacion.css';
-import '../Landing/css/main.css';
-import '../Landing/css/fontawesome-all.min.css';
-import '../Landing/css/noscript.css';
-import '../Landing/css/animate.css';
 import logo4 from '../Landing/img/logo4.png';
 import axios from 'axios';
 
