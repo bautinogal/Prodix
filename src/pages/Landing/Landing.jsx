@@ -140,7 +140,9 @@ const Landing = (props) => {
                         <li><a href="#" className="mainbtn button bold wide">HACÉ TU PREDICCIÓN</a></li>
                     </ul>
                 </div>
-
+                <div className="">
+                    <img src={loginbg} alt="" style={{ display: 'none' }} />
+                </div>
             </section>
         
             <section className="fadeIn wrapper style1 align-center">
