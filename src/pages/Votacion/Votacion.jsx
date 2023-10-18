@@ -166,7 +166,6 @@ const Votacion = (props) => {
         }));
         let res = await axios.post(`${env.backendUrl}/votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
         setLoading(0);
-        setVotacion(res);
         navigate('/resultados');
     }
 
