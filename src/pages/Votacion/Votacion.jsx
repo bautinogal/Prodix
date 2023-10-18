@@ -3,10 +3,10 @@ import { useRef, useState, useMemo, useEffect } from 'react';
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useNavigate } from 'react-router-dom';
 import { isIOS } from '../../lib/utils/index.js';
-import '../styles/main.css'; 
-import '../styles/fontawesome-all.min.css'; 
-import '../styles/noscript.css'; 
-import '../styles/animate.css'; 
+import '../styles/main.css';
+import '../styles/fontawesome-all.min.css';
+import '../styles/noscript.css';
+import '../styles/animate.css';
 import data from '../data.js';
 import {
     Avatar, Badge, Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Grid, Slider, Step, StepLabel, Stepper,
@@ -17,6 +17,7 @@ import './Votacion.css';
 import logo4 from '../Landing/img/logo4.png';
 import bgWave from '../Landing/img/bgWave.png';
 import axios from 'axios';
+import LoadingModal from '../../components/LoadingModal.jsx';
 
 //"Si la fórmula más votada obtiene más del 45% del voto válidamente emitido o 
 //más del 40% con una diferencia mayor al 10% con la fórmula que le sigue en votos"
@@ -27,6 +28,7 @@ const Votacion = (props) => {
     const [openTutorial, setOpenTutorial] = useState(true);
     const [loading, setLoading] = useState(0);
     const [alias, setAlias] = useState(null);
+    const [openAlias, setOpenAlias] = useState(false);
 
     const handleChangePrimary = (e, x) => {
 
@@ -148,9 +150,11 @@ const Votacion = (props) => {
                 { ...user, userAgent, conc, mem },
                 { headers: { 'Authorization': `Bearer ${accessToken}` } })
                 .catch(console.error);
-            console.log(res.data)
-            setValues(res.data)
+
+            //console.log(res.data)
+           // setValues(res.data)
             setLoading(0);
+            setOpenAlias(true);
         }
     }
 
@@ -173,15 +177,8 @@ const Votacion = (props) => {
 
     useEffect(() => { onLogin(); }, [isAuthenticated, user]);
 
-    return (<div style={{
-        backgroundImage: "url(/src/pages/Landing/img/bgWave.png)", backgroundSize: 'cover',
-        backgroundRepeatt: 'no-repeat', backgroundAttachment: 'fixed', width: '100%', height: '100%', minHeight: '105vh'
-    }}>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossOrigin="anonymous" referrerPolicy="no-referrer" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" crossOrigin="anonymous" referrerPolicy="no-referrer" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-        {/* <TutorialVotacion /> */}
-        <Dialog open={alias == null}  >
+    const AliasModal = () => {
+        return (<Dialog open={alias == null}  >
             <h3 className='bold' style={{ paddingLeft: '1em', paddingTop: '1em' }}>Usar un Alias</h3>
             {/* <DialogTitle color={'#71ddf7'}> {"Usar un Alias"} </DialogTitle> */}
             <DialogContent>
@@ -192,26 +189,33 @@ const Votacion = (props) => {
             </DialogContent>
             <DialogActions>
                 <ul className="actions stacked">
-                    <li><a onClick={e => setAlias()} href="#" className="mainbtn button bold wide">Aceptar</a></li>
+                    <li><a onClick={e => setOpenAlias(false)} href="#" className="mainbtn button bold wide">Aceptar</a></li>
                 </ul>
             </DialogActions>
-        </Dialog>
-        <div>
-            <Backdrop open={false} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} >
-                <CircularProgress color="inherit" />
-            </Backdrop>
-        </div>
+        </Dialog>)
+    };
+
+    return (<div style={{
+        backgroundImage: "url(/src/pages/Landing/img/bgWave.png)", backgroundSize: 'cover',
+        backgroundRepeatt: 'no-repeat', backgroundAttachment: 'fixed', width: '100%', height: '100%', minHeight: '105vh'
+    }}>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossOrigin="anonymous" referrerPolicy="no-referrer" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" crossOrigin="anonymous" referrerPolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+        {/* <TutorialVotacion /> */}
+        {openAlias ? <AliasModal/> : null}
+        {loading ? <LoadingModal/> : null}
         <Grid container spacing={2} padding={'20px'}>
             <Grid item xs={9}>
                 <Typography variant="h6" gutterBottom component="div"><img src={logo4} alt="logo" style={{ height: '3em', marginTop: '1em', marginLeft: '1em' }} /> </Typography>
             </Grid>
             <Grid item xs={8}>
-                <Typography style={{fontWeight: 'bold',marginLeft: '1em'}} variant="h6" gutterBottom component="div">{`¿Cómo creés que van a ser los resultados de las elecciones?`} </Typography>
+                <Typography style={{ fontWeight: 'bold', marginLeft: '1em' }} variant="h6" gutterBottom component="div">{`¿Cómo creés que van a ser los resultados de las elecciones?`} </Typography>
             </Grid>
             <Grid item xs={12} />
             <Grid item xs={12}>
                 {values?.map(x =>
-                    <Grid item key={x.group} xs={12} style={{marginLeft:'1em'}}>
+                    <Grid item key={x.group} xs={12} style={{ marginLeft: '1em' }}>
                         <Grid container spacing={2}>
                             <Grid item xs={2}>
                                 <Badge overlap="circular" anchorOrigin={{ vertical: 'top', horizontal: 'right', }}
@@ -224,7 +228,7 @@ const Votacion = (props) => {
                             </Grid>
                             <Grid item xs={3}>
                                 <Slider
-                                    style={{ color: x.color}}
+                                    style={{ color: x.color }}
                                     step={0.01}
                                     //valueLabelDisplay="on"
                                     value={x.value}
@@ -232,7 +236,7 @@ const Votacion = (props) => {
                             </Grid>
                             <Grid item xs={4}>
                                 <Input
-                                    style={{marginLeft:'1em'}}
+                                    style={{ marginLeft: '1em' }}
                                     value={x.value}
                                     size="small"
                                     onChange={e => handleChangePrimary(e, x)}
@@ -242,11 +246,11 @@ const Votacion = (props) => {
                         </Grid>
                     </Grid>)}
             </Grid>
-            <Grid item xs={8} style={{marginTop:'2em'}}>
-                <Typography style={{fontWeight: 'bold',marginLeft: '1em'}} variant="h6" gutterBottom component="div">{`Si hay ballotage sería entre:`} </Typography>
+            <Grid item xs={8} style={{ marginTop: '2em' }}>
+                <Typography style={{ fontWeight: 'bold', marginLeft: '1em' }} variant="h6" gutterBottom component="div">{`Si hay ballotage sería entre:`} </Typography>
             </Grid>
             <Grid item xs={4} />
-            <Grid item xs={12}style={{marginLeft:'1em'}}>
+            <Grid item xs={12} style={{ marginLeft: '1em' }}>
                 {values.filter(v => v.ballotage).length === 2 ? values.filter(v => v.ballotage)?.map(x =>
                     <Grid item key={x.group} xs={12}>
                         <Grid container spacing={2}>
@@ -267,7 +271,7 @@ const Votacion = (props) => {
                             </Grid>
                             <Grid item xs={4}>
                                 <Input
-                                    style={{marginLeft:'1em'}}
+                                    style={{ marginLeft: '1em' }}
                                     value={x.ballotage}
                                     size="small"
                                     onChange={e => handleChangeBallotage(e, x)}
@@ -283,8 +287,8 @@ const Votacion = (props) => {
                     Resetear
                 </Button> */}
                 <ul className="actions stacked">
-                        <li><a disabled={!values.find(v => v.firstRoundWinner || v.ballotageWinner)}
-                    onClick={onVotar}  href="#" className="mainbtn button bold wide" style={{marginRight:'2em',marginBottom:'2em'}}>GUARDAR</a></li>
+                    <li><a disabled={!values.find(v => v.firstRoundWinner || v.ballotageWinner)}
+                        onClick={onVotar} href="#" className="mainbtn button bold wide" style={{ marginRight: '2em', marginBottom: '2em' }}>GUARDAR</a></li>
                 </ul>
             </Grid>
         </Grid>
