@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { isIOS } from '../../lib/utils/index.js';
 import data from '../data.js';
 import {
-    Avatar, Badge, Backdrop, Box, Button, CircularProgress, Dialog, DialogTitle, DialogContent, Grid, Slider, Step, StepLabel, Stepper,
-    Typography, IconButton, Input
+    Avatar, Badge, Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Grid, Slider, Step, StepLabel, Stepper,
+    Typography, IconButton, Input, TextField
 } from '@mui/material';
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
 import './Votacion.css';
@@ -15,6 +15,7 @@ import '../Landing/css/fontawesome-all.min.css';
 import '../Landing/css/noscript.css';
 import '../Landing/css/animate.css';
 import logo4 from '../Landing/img/logo4.png';
+import '../Landing/img/bgWave.png';
 import axios from 'axios';
 
 //"Si la fórmula más votada obtiene más del 45% del voto válidamente emitido o 
@@ -25,6 +26,7 @@ const Votacion = (props) => {
     const [values, setValues] = useState(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null, firstRoundWinner: false })));
     const [openTutorial, setOpenTutorial] = useState(true);
     const [loading, setLoading] = useState(0);
+    const [alias, setAlias] = useState(null);
 
     const handleChangePrimary = (e, x) => {
 
@@ -179,6 +181,21 @@ const Votacion = (props) => {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
         {/* <TutorialVotacion /> */}
+        <Dialog open={alias == null}  >
+            <h3 className='bold' style={{ paddingLeft: '1em', paddingTop: '1em' }}>Usar un Alias</h3>
+            {/* <DialogTitle color={'#71ddf7'}> {"Usar un Alias"} </DialogTitle> */}
+            <DialogContent>
+                <DialogContentText color={'#2f2f2f'}>
+                    En nuestra plataforma, entendemos y respetamos tu privacidad. Si querés compartir tus predicciones con otros usuarios de manera anónima y sin revelar tu identidad real, podés usar un alias en lugar de tu nombre real.
+                </DialogContentText>
+                <TextField sx={{ paddingTop: '1em' }} value={user?.name || ''}></TextField>
+            </DialogContent>
+            <DialogActions>
+                <ul className="actions stacked">
+                    <li><a onClick={e => setAlias()} href="#" className="mainbtn button bold wide">Aceptar</a></li>
+                </ul>
+            </DialogActions>
+        </Dialog>
         <div>
             <Backdrop open={isLoading || loading > 0} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} >
                 <CircularProgress color="inherit" />

@@ -1,4 +1,4 @@
-import { Avatar, Backdrop, Box, Button, CircularProgress, Grid, Slider, Typography, IconButton, Input } from '@mui/material';
+import { Avatar, Backdrop, Box, Button, CircularProgress, Grid, Slider, Typography, IconButton, Input, Tab, Tabs } from '@mui/material';
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
 import { AreaChart, Area, BarChart, Legend, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ComposedChart } from 'recharts';
 import { DataGrid, GridToolbar, GridRowModes, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
@@ -12,6 +12,7 @@ import axios from 'axios';
 const Resultados = (props) => {
     const { logout, user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
     const [votacion, setVotacion] = useState();
+    const [tab, setTab] = useState(0);
 
     useEffect(() => {
         getAccessTokenSilently()
@@ -25,13 +26,24 @@ const Resultados = (props) => {
         .filter(x => !x.autoAdjust)
         .map(x => ({ ...x, primeraVuelta: Math.round(Math.random() * 30), segundaVuelta: Math.round(Math.random() * 100) }));
 
-    return (
-        <div style={{ padding: '2.5%', width: "95%", height: "60vh" }}>
-            <Backdrop open={votacion == null} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} >
-                <CircularProgress color="inherit" />
-            </Backdrop>
-            <Typography variant="h6" gutterBottom component="div">{`Lo que votaron otras personas`} </Typography>
-            {/* <ResponsiveContainer width="100%" height="100%">
+    return (<div style={{ padding: '2.5%', width: "95%", height: "120vh" }}>
+        <Tabs value={tab} onChange={(e, v) => setTab(v)}>
+            <Tab label="Primera Vuelta" value={0} />
+            <Tab label="Ballotage" value={1} />
+        </Tabs>
+        <Backdrop open={votacion == null} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} >
+            <CircularProgress color="inherit" />
+        </Backdrop>
+        <Grid container spacing={2} padding={'0px'}>
+            <Grid item xs={6} children={<Avatar src={''} />} />
+            <Grid item xs={6} children={<Avatar src={''} />} />
+            <Grid item xs={6} children={<Avatar src={''} />} />
+            <Grid item xs={6} children={<Avatar src={''} />} />
+            <Grid item xs={6} children={<Avatar src={''} />} />
+            <Grid item xs={6} children={<Avatar src={''} />} />
+        </Grid>
+        <Typography variant="h6" gutterBottom component="div">{`Lo que votaron otras personas`} </Typography>
+        {/* <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart layout="vertical" width={'100%'} height={'60vh'} data={results} margin={{ top: 20, right: 20, bottom: 20, left: 20, }} >
                     <CartesianGrid stroke="#f5f5f5" />
                     <XAxis type="number" />
@@ -43,33 +55,8 @@ const Resultados = (props) => {
                     <Bar dataKey="segundaVuelta" barSize={20} fill="#F6AEF8" label='Ballotage' />
                 </ComposedChart>
             </ResponsiveContainer> */}
-
-            <DataGrid
-                {...{
-                    sx: { backgroundColor: 'white', marginTop: '1em' },
-                    autoHeight: true,
-                }}
-                getRowId={r => r.sub}
-                rows={votacion || []}
-                columns={[
-                    { field: 'picture', headerName: '', flex: 10, renderCell: (params) => <Avatar src={params.value} /> },
-                    { field: 'name', headerName: '', flex: 100 },
-                    ...data.filter(x => !x.autoAdjust).map(d => ({
-                        field: d.lastName, headerName: d.lastName, flex: 100,
-                        renderCell: (params) => (<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                            <Grid container spacing={2} padding={'0px'}>
-                                <Grid item xs={6}>
-                                    <Typography color={'#4AD0F0'} gutterBottom component="div">{Math.round(Math.random() * 30)}%</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography color={'#E880EC'}  gutterBottom component="div">{Math.round(Math.random() * 30)}%</Typography>
-                                </Grid>
-                            </Grid>
-                        </div>)
-                    }))
-                ]} />
-            <Button variant="contained" onClick={() => navigate('/votacion')} className='botton-guardar botton-text'>Volver</Button>
-        </div>
+        <Button variant="contained" onClick={() => navigate('/votacion')} className='botton-guardar botton-text'>Volver</Button>
+    </div>
 
     )
 }
