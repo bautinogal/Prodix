@@ -146,7 +146,7 @@ const Votacion = (props) => {
             const accessToken = await getAccessTokenSilently().catch(console.error);
             const { userAgent, hardwareConcurrency: conc, deviceMemory: mem } = navigator;
 
-            let res = await axios.post(`${env.backendUrl}/login`,
+            let res = await axios.post(`${env.backendUrl}login`,
                 { ...user, userAgent, conc, mem },
                 { headers: { 'Authorization': `Bearer ${accessToken}`, 'Access-Control-Allow-Origin': '*' }, withCredentials: true })
                 .catch(console.error);
