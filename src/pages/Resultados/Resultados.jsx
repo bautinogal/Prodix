@@ -8,6 +8,7 @@ import env from '../../config/env.js';
 import { useRef, useState, useMemo, useEffect } from 'react';
 import data from '../data.js';
 import axios from 'axios';
+import logo4 from '../img/logo4.png';
 
 const Resultados = (props) => {
     const { logout, user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
@@ -26,22 +27,30 @@ const Resultados = (props) => {
         .filter(x => !x.autoAdjust)
         .map(x => ({ ...x, primeraVuelta: Math.round(Math.random() * 30), segundaVuelta: Math.round(Math.random() * 100) }));
 
-    return (<div style={{ padding: '2.5%', width: "95%", height: "120vh" }}>
+    return (<div>
+        <img src={logo4} alt="" style={{  height: '3em' }} />
+        <Typography variant="h4" gutterBottom component="div">{`Resultados`}</Typography>
+        <Typography variant="p" gutterBottom component="div">{`Total de predicciones 1324 personas`}</Typography>
+        <Grid container spacing={2} padding={'1em'}>
+            <Grid item xs={4} children={<Avatar src={''} />} />
+            <Grid item xs={4} children={<Avatar src={''} />} />
+            <Grid item xs={4} children={<Avatar src={''} />} />
+            <Grid item xs={4} children={<Avatar src={''} />} />
+            <Grid item xs={4} children={<Avatar src={''} />} />
+            <Grid item xs={4} children={<Avatar src={''} />} />
+        </Grid>
+        <Typography variant="p" gutterBottom component="div">{`Creen que Massa gana en primera vuelta`}</Typography>
+        
+        <Typography variant="h2" gutterBottom component="div">{`87%`}</Typography>
+        <Typography variant="p" gutterBottom component="div">{`Creen que hay ballotage`}</Typography>
+
+        <Typography variant="h2" gutterBottom component="div">{`32%`}</Typography>
+        <Typography variant="p" gutterBottom component="div">{`Creen que hay ballotage`}</Typography>
+
         <Tabs value={tab} onChange={(e, v) => setTab(v)}>
             <Tab label="Primera Vuelta" value={0} />
             <Tab label="Ballotage" value={1} />
         </Tabs>
-        <Backdrop open={votacion == null} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} >
-            <CircularProgress color="inherit" />
-        </Backdrop>
-        <Grid container spacing={2} padding={'0px'}>
-            <Grid item xs={6} children={<Avatar src={''} />} />
-            <Grid item xs={6} children={<Avatar src={''} />} />
-            <Grid item xs={6} children={<Avatar src={''} />} />
-            <Grid item xs={6} children={<Avatar src={''} />} />
-            <Grid item xs={6} children={<Avatar src={''} />} />
-            <Grid item xs={6} children={<Avatar src={''} />} />
-        </Grid>
         <Typography variant="h6" gutterBottom component="div">{`Lo que votaron otras personas`} </Typography>
         {/* <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart layout="vertical" width={'100%'} height={'60vh'} data={results} margin={{ top: 20, right: 20, bottom: 20, left: 20, }} >
