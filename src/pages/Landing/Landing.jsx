@@ -53,7 +53,7 @@ const Landing = (props) => {
                     </div>
                     <div className='col-6'>
                         <ul className="icons right-aligned" style={{marginTop:15}}>
-                            <li><a href="#" className="icon style2 fa-user fa-solid content-align-right"><span className="label">User</span></a></li>
+                            <li><a onClick={onJugar} href="#" className="icon style2 fa-user fa-solid content-align-right"><span className="label">User</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ const Landing = (props) => {
                         <li><p><span className='subtitle'>Seguro y anónimo</span> <br /> Tus datos están seguros y tu participación puede ser anónima.</p></li>
                     </ul>
                     <ul className="actions stacked">
-                        <li><a href="#" className="mainbtn button bold wide">Jugar</a></li>
+                        <li><a href="#" onClick={onJugar}className="mainbtn button bold wide">Jugar</a></li>
                     </ul>
                 </div>
                 <div className="content  ">
@@ -137,7 +137,7 @@ const Landing = (props) => {
                         <img src={votodibujo5} alt="" style={{ width: '95%' }} />
                     </div>
                     <ul className="actions stacked">
-                        <li><a href="#" className="mainbtn button bold wide">HACÉ TU PREDICCIÓN</a></li>
+                        <li><a onClick={onJugar} href="#" className="mainbtn button bold wide">HACÉ TU PREDICCIÓN</a></li>
                     </ul>
                 </div>
 
