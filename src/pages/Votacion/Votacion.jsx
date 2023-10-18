@@ -190,24 +190,15 @@ const Votacion = (props) => {
         </div>
         <Grid container spacing={2} padding={'20px'}>
             <Grid item xs={9}>
-                <Typography variant="h6" gutterBottom component="div"><img src={logo4} alt="logo" style={{ height: '2em' }} /> </Typography>
-            </Grid>
-            <Grid item xs={3} >
-                <ul className="icons right-aligned">
-                    <li>
-                        <a href="#" className="icon style2 fa-user fa-solid content-align-right">
-                            <span className="label">User</span>
-                        </a>
-                    </li>
-                </ul>
+                <Typography variant="h6" gutterBottom component="div"><img src={logo4} alt="logo" style={{ height: '3em', marginTop: '1em', marginLeft: '1em' }} /> </Typography>
             </Grid>
             <Grid item xs={8}>
-                <Typography variant="h6" gutterBottom component="div">{`PRIMERA VUELTA:`} </Typography>
+                <Typography style={{fontWeight: 'bold',marginLeft: '1em'}} variant="h6" gutterBottom component="div">{`¿Cómo creés que van a ser los resultados de las elecciones?`} </Typography>
             </Grid>
             <Grid item xs={12} />
             <Grid item xs={12}>
                 {values?.map(x =>
-                    <Grid item key={x.group} xs={12}>
+                    <Grid item key={x.group} xs={12} style={{marginLeft:'1em'}}>
                         <Grid container spacing={2}>
                             <Grid item xs={2}>
                                 <Badge overlap="circular" anchorOrigin={{ vertical: 'top', horizontal: 'right', }}
@@ -220,7 +211,7 @@ const Votacion = (props) => {
                             </Grid>
                             <Grid item xs={4}>
                                 <Slider
-                                    style={{ color: x.color }}
+                                    style={{ color: x.color}}
                                     step={0.01}
                                     //valueLabelDisplay="on"
                                     value={x.value}
@@ -228,6 +219,7 @@ const Votacion = (props) => {
                             </Grid>
                             <Grid item xs={2}>
                                 <Input
+                                    style={{marginLeft:'1em'}}
                                     value={x.value}
                                     size="small"
                                     onChange={e => handleChangePrimary(e, x)}
@@ -237,11 +229,11 @@ const Votacion = (props) => {
                         </Grid>
                     </Grid>)}
             </Grid>
-            <Grid item xs={8}>
-                <Typography variant="h6" gutterBottom component="div">{`BALLOTAGE`} </Typography>
+            <Grid item xs={8} style={{marginTop:'2em'}}>
+                <Typography style={{fontWeight: 'bold',marginLeft: '1em'}} variant="h6" gutterBottom component="div">{`Si hay ballotage sería entre:`} </Typography>
             </Grid>
             <Grid item xs={4} />
-            <Grid item xs={12}>
+            <Grid item xs={12}style={{marginLeft:'1em'}}>
                 {values.filter(v => v.ballotage).length === 2 ? values.filter(v => v.ballotage)?.map(x =>
                     <Grid item key={x.group} xs={12}>
                         <Grid container spacing={2}>
@@ -262,6 +254,7 @@ const Votacion = (props) => {
                             </Grid>
                             <Grid item xs={2}>
                                 <Input
+                                    style={{marginLeft:'1em'}}
                                     value={x.ballotage}
                                     size="small"
                                     onChange={e => handleChangeBallotage(e, x)}
@@ -276,11 +269,10 @@ const Votacion = (props) => {
                     onClick={() => navigate('/resultados')} >
                     Resetear
                 </Button> */}
-                <Button variant="contained" className='botton-text botton-guardar'
-                    disabled={!values.find(v => v.firstRoundWinner || v.ballotageWinner)}
-                    onClick={onVotar}  >
-                    Guardar
-                </Button>
+                <ul className="actions stacked">
+                        <li><a disabled={!values.find(v => v.firstRoundWinner || v.ballotageWinner)}
+                    onClick={onVotar}  href="#" className="mainbtn button bold wide" style={{marginRight:'2em',marginBottom:'2em'}}>GUARDAR</a></li>
+                </ul>
             </Grid>
         </Grid>
     </div>);
