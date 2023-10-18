@@ -15,6 +15,7 @@ import {
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
 import './Votacion.css';
 import logo4 from '../Landing/img/logo4.png';
+import bgWave from '../Landing/img/bgWave.png';
 import axios from 'axios';
 
 //"Si la fórmula más votada obtiene más del 45% del voto válidamente emitido o 
