@@ -148,11 +148,11 @@ const Votacion = (props) => {
 
             let res = await axios.post(`${env.backendUrl}/login`,
                 { ...user, userAgent, conc, mem },
-                { headers: { 'Authorization': `Bearer ${accessToken}`, 'Access-Control-Allow-Origin': '*' }, withCredentials: true })
+                { headers: { 'Authorization': `Bearer ${accessToken}` } })
                 .catch(console.error);
 
-            //console.log(res.data)
-            // setValues(res.data)
+            console.log(res.data)
+            if(res.data) setValues(res.data);
             setLoading(0);
             setOpenAlias(true);
         }
@@ -170,7 +170,7 @@ const Votacion = (props) => {
             firstRoundWinner: x.firstRoundWinner,
             ballotageWinner: x.ballotageWinner
         }));
-        let res = await axios.post(`${env.backendUrl}votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}`, 'Access-Control-Allow-Origin': '*'  } }).catch(console.error);
+        let res = await axios.post(`${env.backendUrl}/votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
         setLoading(0);
         navigate('/resultados');
     }
