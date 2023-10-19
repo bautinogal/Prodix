@@ -38,18 +38,18 @@ const Resultados = (props) => {
     }, {})
     console.log(votacion);
     console.log(results);
-    const perGanadorPrimera = (candidato) => votacion.length > 0 ? results[candidato]?.votes.filter(x => x.firstRoundWinner).length / votacion.length * 100 : 0;
+    const perGanadorPrimera = (candidato) => (votacion.length > 0 ? results[candidato]?.votes.filter(x => x.firstRoundWinner).length / votacion.length * 100 : 0).toFixed(2);
     const ganadorPrimera = Object.values(results)
         .sort((a, b) => - a.votes.filter(x => x.firstRoundWinner).length + b.votes.filter(x => x.firstRoundWinner).length)[0]?.lastName;
-    const perBallo = votacion?.length > 0 ? votacion.map(x => x.votacion).filter(x => x.find(x => x.ballotage)).length / votacion?.length * 100 : 0;
-    const balloCandPer = votacion?.length > 0 ? Object.entries(votacion.map(x => x.votacion).filter(x => x.find(x => x.ballotage)).reduce((p, x) => {
+    const perBallo = (votacion?.length > 0 ? votacion.map(x => x.votacion).filter(x => x.find(x => x.ballotage)).length / votacion?.length * 100 : 0).toFixed(2);
+    const balloCandPer = votacion?.length > 0 ? (Object.entries(votacion.map(x => x.votacion).filter(x => x.find(x => x.ballotage)).reduce((p, x) => {
         const finalistas = x.filter(x => x.ballotage);
         if (finalistas.length === 2) {
             p[finalistas[0].lastName + '-' + finalistas[1].lastName] ??= 0;
             p[finalistas[0].lastName + '-' + finalistas[1].lastName] += 1;
         }
         return p;
-    }, {})).sort((a, b) => a[1] - a[b])[0][1] / votacion.length * 100 : {};
+    }, {})).sort((a, b) => a[1] - a[b])[0][1] / votacion.length * 100).toFixed(2) : {};
     const balloCand = votacion?.length > 0 ? Object.entries(votacion.map(x => x.votacion).filter(x => x.find(x => x.ballotage)).reduce((p, x) => {
         const finalistas = x.filter(x => x.ballotage);
         if (finalistas.length === 2) {
