@@ -183,11 +183,9 @@ const Votacion = (props) => {
     const AliasModal = () => {
         const [_alias, setAlias] = useState(alias || user?.name || '');
         const onAccept = async () => {
-            setLoading(1);
             const accessToken = await getAccessTokenSilently().catch(console.error);
             await axios.post(`${env.backendUrl}/alias`, _alias, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
-            setLoading(0);
-            setOpenAlias(false)
+            setOpenAlias(false);
         }
         return (<Dialog open={true}  >
             <h3 className='bold' style={{ paddingLeft: '1em', paddingTop: '1em' }}>Usar un Alias</h3>
