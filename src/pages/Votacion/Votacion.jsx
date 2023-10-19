@@ -27,7 +27,6 @@ const Votacion = (props) => {
     const [values, setValues] = useState(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null, firstRoundWinner: false })));
     const [openTutorial, setOpenTutorial] = useState(true);
     const [loading, setLoading] = useState(0);
-    const [alias, setAlias] = useState(null);
     const [openAlias, setOpenAlias] = useState(false);
 
     const handleChangePrimary = (e, x) => {
@@ -146,13 +145,14 @@ const Votacion = (props) => {
             setLoading(1);
             const accessToken = await getAccessTokenSilently().catch(console.error);
             const { userAgent, hardwareConcurrency: conc, deviceMemory: mem } = navigator;
+
             let res = await axios.post(`${env.backendUrl}/login`,
                 { ...user, userAgent, conc, mem },
-                { headers: { 'Authorization': `Bearer ${accessToken}` } })
+                { headers: { 'Authorization': `Bearer ${accessToken}`, 'Access-Control-Allow-Origin': '*' }, withCredentials: true })
                 .catch(console.error);
 
             //console.log(res.data)
-           // setValues(res.data)
+            // setValues(res.data)
             setLoading(0);
             setOpenAlias(true);
         }
@@ -170,7 +170,7 @@ const Votacion = (props) => {
             firstRoundWinner: x.firstRoundWinner,
             ballotageWinner: x.ballotageWinner
         }));
-        let res = await axios.post(`${env.backendUrl}/votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
+        let res = await axios.post(`${env.backendUrl}votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}`, 'Access-Control-Allow-Origin': '*'  } }).catch(console.error);
         setLoading(0);
         navigate('/resultados');
     }
@@ -178,14 +178,15 @@ const Votacion = (props) => {
     useEffect(() => { onLogin(); }, [isAuthenticated, user]);
 
     const AliasModal = () => {
-        return (<Dialog open={alias == null}  >
+        const [alias, setAlias] = useState(user?.name || '');
+        return (<Dialog open={true}  >
             <h3 className='bold' style={{ paddingLeft: '1em', paddingTop: '1em' }}>Usar un Alias</h3>
             {/* <DialogTitle color={'#71ddf7'}> {"Usar un Alias"} </DialogTitle> */}
             <DialogContent>
                 <DialogContentText color={'#2f2f2f'}>
                     En nuestra plataforma, entendemos y respetamos tu privacidad. Si querés compartir tus predicciones con otros usuarios de manera anónima y sin revelar tu identidad real, podés usar un alias en lugar de tu nombre real.
                 </DialogContentText>
-                <TextField sx={{ paddingTop: '1em' }} value={user?.name || ''}></TextField>
+                <TextField sx={{ paddingTop: '1em' }} onChange={(e, v) => setAlias(e.target.value)} value={alias}></TextField>
             </DialogContent>
             <DialogActions>
                 <ul className="actions stacked">
@@ -203,8 +204,8 @@ const Votacion = (props) => {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
         {/* <TutorialVotacion /> */}
-        {openAlias ? <AliasModal/> : null}
-        {loading ? <LoadingModal/> : null}
+        {openAlias ? <AliasModal /> : null}
+        {loading ? <LoadingModal /> : null}
         <Grid container spacing={2} padding={'20px'}>
             <Grid item xs={9}>
                 <Typography variant="h6" gutterBottom component="div"><img src={logo4} alt="logo" style={{ height: '3em', marginTop: '1em', marginLeft: '1em' }} /> </Typography>
