@@ -1,4 +1,7 @@
-import { Avatar, Backdrop, Box, Button, CircularProgress, Grid, Slider, Typography, IconButton, Input, Tab, Tabs, Container } from '@mui/material';
+import {
+    Avatar, Backdrop, Box, Button, CircularProgress, Grid, Slider, Typography, IconButton, Input, Tab, Tabs, Container,
+    List, ListItem, ListItemText, ListSubheader
+} from '@mui/material';
 import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
 import { AreaChart, Area, BarChart, Legend, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ComposedChart } from 'recharts';
 import { DataGrid, GridToolbar, GridRowModes, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
@@ -46,7 +49,7 @@ const Resultados = (props) => {
             p[finalistas[0].lastName + '-' + finalistas[1].lastName] += 1;
         }
         return p;
-    }, {})).sort((a, b) => a[1] - a[b])[0][1] /  votacion.length * 100: {}; 
+    }, {})).sort((a, b) => a[1] - a[b])[0][1] / votacion.length * 100 : {};
     const balloCand = votacion?.length > 0 ? Object.entries(votacion.map(x => x.votacion).filter(x => x.find(x => x.ballotage)).reduce((p, x) => {
         const finalistas = x.filter(x => x.ballotage);
         if (finalistas.length === 2) {
@@ -56,7 +59,6 @@ const Resultados = (props) => {
         return p;
     }, {})).sort((a, b) => a[1] - a[b])[0][0].split('-') : {};
 
-    console.log(balloCand)
     return (<div>
         {votacion.length === 0 ? <LoadingModal /> : null}
         <Grid
@@ -108,22 +110,37 @@ const Resultados = (props) => {
                 <Tab label="Primera Vuelta" value={0} />
                 <Tab label="Ballotage" value={1} />
             </Tabs>
-            {/* <ResponsiveContainer width="100%" height="100%">
-                    <ComposedChart layout="vertical" width={'100%'} height={'60vh'} data={results} margin={{ top: 20, right: 20, bottom: 20, left: 20, }} >
-                        <CartesianGrid stroke="#f5f5f5" />
-                        <XAxis type="number" />
-                        <YAxis dataKey="lastName" type="category" scale="band" />
-                        <Tooltip />
-                        <Legend />
-                        <Area dataKey="primeraVuelta" fill="#8884d8" stroke="#8884d8" />  
-                        <Bar dataKey="primeraVuelta" barSize={20} fill="#71ddf7" label='Primera Vuelta' />
-                        <Bar dataKey="segundaVuelta" barSize={20} fill="#F6AEF8" label='Ballotage' />
-                    </ComposedChart>
-                </ResponsiveContainer> */}
+            <List sx={{ paddingTop: '2em', width: '100%', maxWidth: 800, bgcolor: 'background.paper', position: 'relative', overflow: 'auto', maxHeight: 1000, '& ul': { padding: 0 }, }} subheader={<li />} >
+                <li>
+                    <ul>
+                        <ListSubheader>
+                            <Grid container>
+                                <Grid item xs={3.3} ></Grid>
+                                <Grid item xs={1.45} ><Avatar style={{ width: '1.8em', height: '1.8em' }} src={results?.Massa?.profileURL} /></Grid>
+                                <Grid item xs={1.45} ><Avatar style={{ width: '1.8em', height: '1.8em' }} src={results?.Bullrich?.profileURL} /></Grid>
+                                <Grid item xs={1.45} ><Avatar style={{ width: '1.8em', height: '1.8em' }} src={results?.Milei?.profileURL} /></Grid>
+                                <Grid item xs={1.45} ><Avatar style={{ width: '1.8em', height: '1.8em' }} src={results?.Schiaretti?.profileURL} /></Grid>
+                                <Grid item xs={1.45} ><Avatar style={{ width: '1.8em', height: '1.8em' }} src={results?.Bregman?.profileURL} /></Grid>
+                                <Grid item xs={1.45} ><Avatar style={{ width: '1.8em', height: '1.8em' }} src={results?.Blanco?.profileURL} /></Grid>
+                            </Grid>
+                        </ListSubheader>
+                        {votacion.map((vot, i) => {
+                            let a = [0, 1, 2, 3, 4, 5]
+                            let arr = tab === 0 ? a.map(i => vot?.votacion[i]?.value) : a.map(i => vot?.votacion[i]?.ballotage);
+                            return (<ListItem key={vot.sub}>
+                                <Grid container spacing={0} height={'1em'} sx={{ backgroundColor: (i % 2 ? '#ededed' : '##dcdcdc') }}>
+                                    <Grid item xs={3.3} height={'1em'} ><Typography fontSize={'.75em'} fontWeight={600} style={{ whiteSpace: 'nowrap', overflow: 'hidden', 'text-overflow': 'ellipsis' }}>{vot.alias} </Typography></Grid>
+                                    {arr.map(i => <Grid item xs={1.45} height={'1em'} fontSize={'.75em'} fontWeight={500}>{i ?? '-'}</Grid>)}
+                                </Grid>
+                            </ListItem>)
+                        })}
+                    </ul>
+                </li>
+            </List>
             <Button variant="contained" onClick={() => navigate('/votacion')} className="mainbtn button bold wide" style={{ borderRadius: '4em', marginTop: '5em' }}>EDITAR MI PRODE</Button>
             <Button variant="contained" onClick={() => navigate('#')} className="mainbtn button bold wide" style={{ borderRadius: '4em', marginBottom: '5em', marginTop: '1em' }}>COMPARTIR</Button>
         </Grid>
-    </div>
+    </div >
 
     )
 }
