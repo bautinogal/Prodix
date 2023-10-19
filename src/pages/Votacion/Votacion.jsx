@@ -65,7 +65,7 @@ const Votacion = (props) => {
         }
 
         setValues(_values);
-    }
+    };
 
     const handleChangeBallotage = (e, x) => {
         if (isIOS && e.type === 'mousedown') return;
@@ -75,7 +75,7 @@ const Votacion = (props) => {
 
         _values = _values.map(d => ({ ...d, ballotageWinner: d.ballotage > 50 ? true : false }));
         setValues(_values)
-    }
+    };
 
     const TutorialVotacion = () => {
         const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
@@ -138,11 +138,10 @@ const Votacion = (props) => {
                 </Box>
             </DialogContent>
         </Dialog>
-    }
+    };
 
     const onLogin = async () => {
         if (isAuthenticated && user && !isLoading) {
-            console.log('onLogin', loading)
             setLoading(1);
             const accessToken = await getAccessTokenSilently().catch(console.error);
             const { userAgent, hardwareConcurrency: conc, deviceMemory: mem } = navigator;
@@ -152,14 +151,13 @@ const Votacion = (props) => {
                 { headers: { 'Authorization': `Bearer ${accessToken}` } })
                 .catch(console.error);
 
-            let { votacion, alias } = res.data;
-            console.log({ votacion, alias })
+            let { votacion, alias } = res?.data || {};
             if (votacion) setValues(JSON.parse((votacion)));
             if (alias) setAlias(Object.keys(JSON.parse(alias))[0]);
             setLoading(0);
             setOpenAlias(true);
         }
-    }
+    };
 
     const onVotar = async () => {
         setLoading(1);
@@ -173,10 +171,10 @@ const Votacion = (props) => {
             firstRoundWinner: x.firstRoundWinner,
             ballotageWinner: x.ballotageWinner
         }));
-        let res = await axios.post(`${env.backendUrl}/votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
+        await axios.post(`${env.backendUrl}/votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
         setLoading(0);
         navigate('/resultados');
-    }
+    };
 
     useEffect(() => { onLogin(); }, [isAuthenticated, user]);
 
