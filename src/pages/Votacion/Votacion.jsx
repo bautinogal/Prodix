@@ -27,6 +27,7 @@ const Votacion = (props) => {
     const [values, setValues] = useState(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null, firstRoundWinner: false })));
     const [openTutorial, setOpenTutorial] = useState(true);
     const [loading, setLoading] = useState(0);
+    const [alias, setAlias] = useState(null);
     const [openAlias, setOpenAlias] = useState(false);
 
     const handleChangePrimary = (e, x) => {
@@ -151,8 +152,10 @@ const Votacion = (props) => {
                 { headers: { 'Authorization': `Bearer ${accessToken}` } })
                 .catch(console.error);
 
-            console.log(res.data)
-            if(res.data) setValues(res.data);
+            let { votacion, alias } = res.data;
+            console.log({ votacion, alias })
+            if (votacion) setValues(JSON.parse((votacion)));
+            if (alias) setAlias(Object.keys(JSON.parse(alias))[0]);
             setLoading(0);
             setOpenAlias(true);
         }
@@ -178,7 +181,14 @@ const Votacion = (props) => {
     useEffect(() => { onLogin(); }, [isAuthenticated, user]);
 
     const AliasModal = () => {
-        const [alias, setAlias] = useState(user?.name || '');
+        const [_alias, setAlias] = useState(alias || user?.name || '');
+        const onAccept = async () => {
+            setLoading(1);
+            const accessToken = await getAccessTokenSilently().catch(console.error);
+            await axios.post(`${env.backendUrl}/alias`, _alias, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
+            setLoading(0);
+            setOpenAlias(false)
+        }
         return (<Dialog open={true}  >
             <h3 className='bold' style={{ paddingLeft: '1em', paddingTop: '1em' }}>Usar un Alias</h3>
             {/* <DialogTitle color={'#71ddf7'}> {"Usar un Alias"} </DialogTitle> */}
@@ -186,11 +196,11 @@ const Votacion = (props) => {
                 <DialogContentText color={'#2f2f2f'}>
                     En nuestra plataforma, entendemos y respetamos tu privacidad. Si querés compartir tus predicciones con otros usuarios de manera anónima y sin revelar tu identidad real, podés usar un alias en lugar de tu nombre real.
                 </DialogContentText>
-                <TextField sx={{ paddingTop: '1em' }} onChange={(e, v) => setAlias(e.target.value)} value={alias}></TextField>
+                <TextField sx={{ paddingTop: '1em' }} onChange={(e, v) => setAlias(e.target.value)} value={_alias}></TextField>
             </DialogContent>
             <DialogActions>
                 <ul className="actions stacked">
-                    <li><a onClick={e => setOpenAlias(false)} href="#" className="mainbtn button bold wide">Aceptar</a></li>
+                    <li><a onClick={onAccept} href="#" className="mainbtn button bold wide">Aceptar</a></li>
                 </ul>
             </DialogActions>
         </Dialog>)
