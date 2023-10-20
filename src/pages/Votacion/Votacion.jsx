@@ -29,6 +29,13 @@ const Votacion = (props) => {
     const [loading, setLoading] = useState(0);
     const [alias, setAlias] = useState(null);
     const [openAlias, setOpenAlias] = useState(false);
+    const [_alias, set_Alias] = useState(alias || user?.name || '');
+
+    const onAcceptAlias = async () => {
+        const accessToken = await getAccessTokenSilently().catch(console.error);
+        await axios.post(`${env.backendUrl}/alias`, _alias, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
+        setOpenAlias(false);
+    }
 
     const handleChangePrimary = (e, x) => {
 
@@ -178,30 +185,6 @@ const Votacion = (props) => {
 
     useEffect(() => { onLogin(); }, [isAuthenticated, user]);
 
-    const AliasModal = () => {
-        const [_alias, setAlias] = useState(alias || user?.name || '');
-        const onAccept = async () => {
-            const accessToken = await getAccessTokenSilently().catch(console.error);
-            await axios.post(`${env.backendUrl}/alias`, _alias, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
-            setOpenAlias(false);
-        }
-        return (<Dialog open={true}  >
-            <h3 className='bold' style={{ paddingLeft: '1em', paddingTop: '1em' }}>Usar un Alias</h3>
-            {/* <DialogTitle color={'#71ddf7'}> {"Usar un Alias"} </DialogTitle> */}
-            <DialogContent>
-                <DialogContentText color={'#2f2f2f'}>
-                    En nuestra plataforma, entendemos y respetamos tu privacidad. Si querés compartir tus predicciones con otros usuarios de manera anónima y sin revelar tu identidad real, podés usar un alias en lugar de tu nombre real.
-                </DialogContentText>
-                <TextField sx={{ paddingTop: '1em' }} onChange={(e, v) => setAlias(e.target.value)} value={_alias}></TextField>
-            </DialogContent>
-            <DialogActions>
-                <ul className="actions stacked">
-                    <li><a onClick={onAccept} href="#" className="mainbtn button bold wide">Aceptar</a></li>
-                </ul>
-            </DialogActions>
-        </Dialog>)
-    };
-
     return (<div style={{
         backgroundImage: "url(/src/pages/Landing/img/bgWave.png)", backgroundSize: 'cover',
         backgroundRepeatt: 'no-repeat', backgroundAttachment: 'fixed', width: '100%', height: '100%', minHeight: '105vh'
@@ -210,7 +193,21 @@ const Votacion = (props) => {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
         {/* <TutorialVotacion /> */}
-        {openAlias ? <AliasModal /> : null}
+        <Dialog open={openAlias}  >
+            <h3 className='bold' style={{ paddingLeft: '1em', paddingTop: '1em' }}>Usar un Alias</h3>
+            {/* <DialogTitle color={'#71ddf7'}> {"Usar un Alias"} </DialogTitle> */}
+            <DialogContent>
+                <DialogContentText color={'#2f2f2f'}>
+                    En nuestra plataforma, entendemos y respetamos tu privacidad. Si querés compartir tus predicciones con otros usuarios de manera anónima y sin revelar tu identidad real, podés usar un alias en lugar de tu nombre real.
+                </DialogContentText>
+                <TextField sx={{ paddingTop: '1em' }} onChange={(e, v) => set_Alias(e.target.value)} value={_alias}></TextField>
+            </DialogContent>
+            <DialogActions>
+                <ul className="actions stacked">
+                    <li><a onClick={onAcceptAlias} href="#" className="mainbtn button bold wide">Aceptar</a></li>
+                </ul>
+            </DialogActions>
+        </Dialog>
         {loading ? <LoadingModal /> : null}
         <Grid container spacing={2} padding={'20px'}>
             <Grid item xs={9}>

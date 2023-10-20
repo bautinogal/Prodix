@@ -1,8 +1,8 @@
 import {
     Avatar, Backdrop, Box, Button, CircularProgress, Grid, Slider, Typography, IconButton, Input, Tab, Tabs, Container,
-    List, ListItem, ListItemText, ListSubheader
+    List, ListItem, ListItemText, ListSubheader, TextField, Paper, InputBase, Divider
 } from '@mui/material';
-import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
+import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp, Search, Menu, Directions } from '@mui/icons-material';
 import { AreaChart, Area, BarChart, Legend, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ComposedChart } from 'recharts';
 import { DataGrid, GridToolbar, GridRowModes, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +22,7 @@ const Resultados = (props) => {
     const { logout, user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
     const [votacion, setVotacion] = useState([]);
     const [tab, setTab] = useState(0);
+    const [filter, setFilter] = useState('');
 
     useEffect(() => {
         getAccessTokenSilently()
@@ -36,8 +37,7 @@ const Resultados = (props) => {
         p[x.lastName].votes.push({ value: x.value, ballotage: x.ballotage, firstRoundWinner: x.firstRoundWinner, ballotageWinner: x.ballotageWinner })
         return p;
     }, {})
-    console.log(votacion);
-    console.log(results);
+
     const perGanadorPrimera = (candidato) => (votacion.length > 0 ? results[candidato]?.votes.filter(x => x.firstRoundWinner).length / votacion.length * 100 : 0).toFixed(2);
     const ganadorPrimera = Object.values(results)
         .sort((a, b) => - a.votes.filter(x => x.firstRoundWinner).length + b.votes.filter(x => x.firstRoundWinner).length)[0]?.lastName;
@@ -110,12 +110,13 @@ const Resultados = (props) => {
                 <Tab label="Primera Vuelta" value={0} />
                 <Tab label="Ballotage" value={1} />
             </Tabs>
-            <List sx={{ paddingTop: '2em', width: '100%', maxWidth: 800, bgcolor: 'background.paper', position: 'relative', overflow: 'auto', maxHeight: 1000, '& ul': { padding: 0 }, }} subheader={<li />} >
+            <List sx={{ marginTop: '2em', width: '100%', maxWidth: 800, bgcolor: 'background.paper', position: 'relative', overflow: 'auto', maxHeight: 1000, '& ul': { padding: 0 }, }} subheader={<li />} >
                 <li>
                     <ul>
                         <ListSubheader>
                             <Grid container>
-                                <Grid item xs={3.3} ></Grid>
+                                <Grid item xs={3} > <InputBase value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Buscar" style={{ height: '1.2em', m: '.5em' }} /> </Grid>
+                                <Grid item xs={.3} > </Grid>
                                 <Grid item xs={1.45} ><Avatar style={{ width: '1.8em', height: '1.8em' }} src={results?.Massa?.profileURL} /></Grid>
                                 <Grid item xs={1.45} ><Avatar style={{ width: '1.8em', height: '1.8em' }} src={results?.Bullrich?.profileURL} /></Grid>
                                 <Grid item xs={1.45} ><Avatar style={{ width: '1.8em', height: '1.8em' }} src={results?.Milei?.profileURL} /></Grid>
@@ -127,6 +128,7 @@ const Resultados = (props) => {
                         {votacion.map((vot, i) => {
                             let a = [0, 1, 2, 3, 4, 5]
                             let arr = tab === 0 ? a.map(i => vot?.votacion[i]?.value) : a.map(i => vot?.votacion[i]?.ballotage);
+                            if (filter !== '' && !vot.alias.toLowerCase().includes(filter.toLowerCase())) return null;
                             return (<ListItem key={vot.sub}>
                                 <Grid container spacing={0} height={'1em'} sx={{ backgroundColor: (i % 2 ? '#ededed' : '##dcdcdc') }}>
                                     <Grid item xs={3.3} height={'1em'} ><Typography fontSize={'.75em'} fontWeight={600} style={{ whiteSpace: 'nowrap', overflow: 'hidden', 'text-overflow': 'ellipsis' }}>{vot.alias} </Typography></Grid>
