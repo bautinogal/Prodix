@@ -158,11 +158,12 @@ const Votacion = (props) => {
                 { headers: { 'Authorization': `Bearer ${accessToken}` } })
                 .catch(console.error);
 
+                
             let { votacion, alias } = res?.data || {};
             if (votacion) setValues(JSON.parse((votacion)));
             if (alias) setAlias(Object.keys(JSON.parse(alias))[0]);
             setLoading(0);
-            setOpenAlias(true);
+            if (!alias) setOpenAlias(true);
         }
     };
 
