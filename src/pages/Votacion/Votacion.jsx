@@ -174,8 +174,8 @@ const Votacion = (props) => {
             name: x.name,
             lastName: x.lastName,
             group: x.group,
-            value: parseFloat(x.value.toFixed(2)),
-            ballotage: parseFloat(x.ballotage?.toFixed(2)),
+            value: parseFloat(parseFloat(x.value).toFixed(2)),
+            ballotage: parseFloat(parseFloat(x.ballotage)?.toFixed(2)),
             firstRoundWinner: x.firstRoundWinner,
             ballotageWinner: x.ballotageWinner
         }));
