@@ -5,11 +5,13 @@ import axios from 'axios';
 import env from '../config/env.js';
 
 import {
-    Avatar, Box, Button, Grid, Slider, Typography, Input, Tab, Tabs,
-    List, ListItem, ListSubheader, TextField, InputBase
+    Avatar, Box, Badge, Button, Grid, Dialog, DialogActions, DialogContent, DialogContentText, Slider, Typography, Input, Tab, Tabs,
+    List, ListItem, ListSubheader, TextField, InputBase, Menu, MenuItem
 } from '@mui/material';
 import { EmojiEvents } from '@mui/icons-material';
 import LoadingModal from '../components/LoadingModal.jsx';
+import data from './data.js';
+import { isIOS } from '../lib/utils/index.js';
 
 import logo4 from './img/logo4.png';
 import votodibujo1 from './img/votodibujo1.png';
@@ -26,30 +28,66 @@ import './styles/animate.css';
 
 export default function Main() {
 
+    const [hash, setHash] = useState(sessionStorage.getItem('hash') || '');
+    const [alias, setAlias] = useState(sessionStorage.getItem('alias') || '');
     const [page, setPage] = useState('Landing');
+
     const { logout, user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
+    const ProfileIcon = () => {
+        const [anchorEl, setAnchorEl] = useState(null);
+        const openProfile = Boolean(anchorEl);
+
+        return (<section className="wrapper style1 align-left">
+            <div className="inner row">
+                <div className="col-6 left-aligned" style={{ padding: 0 }}>
+                    <a href="#">
+                        <img src={logo4} alt="logo" height="80" />
+                    </a>
+                </div>
+                <div className='col-6'>
+                    <ul className="icons right-aligned" style={{ marginTop: 15 }}>
+                        <li><a onClick={e => setAnchorEl(e.currentTarget)} href="#" className="icon style2 fa-user fa-solid content-align-right"><span className="label">User</span></a></li>
+                    </ul>
+                </div>
+                <Menu anchorEl={anchorEl} open={openProfile} onClose={e => setAnchorEl(null)}>
+                    <MenuItem onClick={e => setAnchorEl(null)}>{`Alias: ${alias}`}</MenuItem>
+                    <MenuItem onClick={e => setAnchorEl(null)}>{`Código: ${hash}`}</MenuItem>
+                </Menu>
+            </div>
+        </section>)
+    }
+
     const Landing = (props) => {
-        const onJugar = () => loginWithRedirect({ appState: { returnTo: "/", } });
+        const [anchorEl, setAnchorEl] = useState(null);
+        const openProfile = Boolean(anchorEl);
 
-        // //Animación de las imagenes
-        // useEffect(() => {
-        //     const handleScroll = () => {
-        //         const elementos = document.querySelectorAll('.item');
-        //         elementos.forEach((elemento) => {
-        //             const rect = elemento.getBoundingClientRect();
-        //             if (rect.top < window.innerHeight) {
-        //                 elemento.classList.add('animated');
-        //             }
-        //         });
-        //     };
+        const onJugar = () => setPage('Votacion');
+        const signin = async () => {
+            let res = await axios.post(`${env.backendUrl}/signin`, {
+                agent: navigator.userAgent || '',
+                conc: navigator.hardwareConcurrency || '',
+                mem: navigator.deviceMemory || '',
+                codeName: navigator.appCodeName || '',
+                appName: navigator.appName || '',
+                version: navigator.appVersion || '',
+                platform: navigator.platform || '',
+                vendor: navigator.vendor || '',
 
-        //     window.addEventListener('scroll', handleScroll);
+            }).catch(console.error);
 
-        //     return () => {
-        //         window.removeEventListener('scroll', handleScroll);
-        //     };
-        // }, []);
+            if (res?.data?.hash) {
+                sessionStorage.setItem('hash', res.data.hash);
+                setHash(res.data.hash);
+            }
+            if (res?.data?.alias) {
+                sessionStorage.setItem('alias', res.data.alias);
+                setAlias(res.data.alias);
+            }
+            console.log(res?.data?.hash, res?.data?.alias)
+        };
+
+        useEffect(() => { if (!(hash || user || isAuthenticated)) signin() }, [isAuthenticated, user, hash, alias]);
 
         return (
             <div id="wrapper" className="divided">
@@ -57,20 +95,7 @@ export default function Main() {
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" crossOrigin="anonymous" referrerPolicy="no-referrer" />
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
                 <link rel="shortcut icon" href="img/logo3.png" type="image/x-icon" />
-                <section className="wrapper style1 align-left">
-                    <div className="inner row">
-                        <div className="col-6 left-aligned" style={{ padding: 0 }}>
-                            <a href="#">
-                                <img src={logo4} alt="logo" height="80" />
-                            </a>
-                        </div>
-                        <div className='col-6'>
-                            <ul className="icons right-aligned" style={{ marginTop: 15 }}>
-                                <li><a onClick={onJugar} href="#" className="icon style2 fa-user fa-solid content-align-right"><span className="label">User</span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
+                <ProfileIcon />
 
                 <section className="fadeIn spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
                     <div className="content back-in-left">
@@ -169,8 +194,6 @@ export default function Main() {
     };
 
     const Votacion = (props) => {
-        const navigate = useNavigate();
-        const { logout, user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
         const [values, setValues] = useState(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null, firstRoundWinner: false })));
         const [openTutorial, setOpenTutorial] = useState(true);
         const [loading, setLoading] = useState(0);
@@ -328,7 +351,7 @@ export default function Main() {
             }));
             await axios.post(`${env.backendUrl}/votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
             setLoading(0);
-            navigate('/resultados');
+            setPage('Resultados');
         };
 
         useEffect(() => { onLogin(); }, [isAuthenticated, user]);
@@ -358,9 +381,10 @@ export default function Main() {
             </Dialog>
             {loading ? <LoadingModal /> : null}
             <Grid container spacing={2} padding={'20px'}>
-                <Grid item xs={9}>
-                    <Typography variant="h6" gutterBottom component="div"><img src={logo4} alt="logo" style={{ height: '3em', marginTop: '1em', marginLeft: '1em' }} /> </Typography>
+                <Grid item xs={12}>
+                    <ProfileIcon />
                 </Grid>
+
                 <Grid item xs={8}>
                     <Typography style={{ fontWeight: 'bold', marginLeft: '1em' }} variant="h6" gutterBottom component="div">{`¿Cómo creés que van a ser los resultados de las elecciones?`} </Typography>
                 </Grid>
@@ -460,7 +484,6 @@ export default function Main() {
                 .catch(setVotacion([]));
         }, []);
 
-        const navigate = useNavigate();
         const results = votacion.map(x => x.votacion).flat().reduce((p, x) => {
             p[x.lastName] ??= { name: x.name, lastName: x.lastName, logoURL: x.logoURL, profileURL: x.profileURL, votes: [] };
             p[x.lastName].votes.push({ value: x.value, ballotage: x.ballotage, firstRoundWinner: x.firstRoundWinner, ballotageWinner: x.ballotageWinner })
@@ -568,13 +591,14 @@ export default function Main() {
                         </ul>
                     </li>
                 </List>
-                <Button variant="contained" onClick={() => navigate('/votacion')} className="mainbtn button bold wide" style={{ borderRadius: '4em', marginTop: '5em' }}>EDITAR MI PRODE</Button>
-                <Button variant="contained" onClick={() => navigate('#')} className="mainbtn button bold wide" style={{ borderRadius: '4em', marginBottom: '5em', marginTop: '1em' }}>COMPARTIR</Button>
+                <Button variant="contained" onClick={() => setPage('Votacion')} className="mainbtn button bold wide" style={{ borderRadius: '4em', marginTop: '5em' }}>EDITAR MI PRODE</Button>
+                <Button variant="contained" disabled onClick={() => setPage(page)} className="mainbtn button bold wide" style={{ borderRadius: '4em', marginBottom: '5em', marginTop: '1em' }}>COMPARTIR</Button>
             </Grid>
         </div >
 
         )
-    }
+    };
+
     switch (page) {
         case 'Landing': return <Landing />;
         case 'Votacion': return <Votacion />;
