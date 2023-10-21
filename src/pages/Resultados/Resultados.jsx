@@ -68,7 +68,7 @@ const Resultados = (props) => {
             alignItems="center">
             <img src={logo4} alt="" style={{ height: '6em', margin: '2em' }} />
             <Typography style={{ fontWeight: '900', fontSize: '6vh' }} variant="h4" gutterBottom component="div">{`Resultados`}</Typography>
-            <Typography variant="p" gutterBottom component="div">{`Total de predicciones ${votacion.length} personas`}</Typography>
+            {/* <Typography variant="p" gutterBottom component="div">{`Total de predicciones ${votacion.length} personas`}</Typography> */}
             <Grid container spacing={2} padding={'2em'} style={{ marginTop: '1em' }} >
                 <Grid item xs={4} children={<Avatar style={{ border: 'solid 4px ' + (ganadorPrimera === 'Massa' ? '#f6aef8' : '#47D3E5'), width: '5em', height: '5em' }} src={results?.Massa?.profileURL} />} style={{ display: 'flex', justifyContent: 'center' }} />
                 <Grid item xs={4} children={<Avatar style={{ border: 'solid 4px ' + (ganadorPrimera === 'Bullrich' ? '#f6aef8' : '#47D3E5'), width: '5em', height: '5em' }} src={results?.Bullrich?.profileURL} />} style={{ display: 'flex', justifyContent: 'center' }} />
