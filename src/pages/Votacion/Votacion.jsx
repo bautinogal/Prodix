@@ -76,9 +76,11 @@ const Votacion = (props) => {
 
     const handleChangeBallotage = (e, x) => {
         if (isIOS && e.type === 'mousedown') return;
+        console.log(e.target.value)
+        console.log(parseFloat((100 - e.target.value).toFixed(2)))
         let _values = values.map(d => x.group === d.group ?
             { ...d, ballotage: e.target.value } :
-            { ...d, ballotage: d.ballotage ? parseFloat((100 - e.target.value).toFixed(2)) : null })
+            { ...d, ballotage: d.ballotage ? parseFloat((100 - e.target.value).toFixed(2)) : 0 })
 
         _values = _values.map(d => ({ ...d, ballotageWinner: d.ballotage > 50 ? true : false }));
         setValues(_values)
@@ -158,7 +160,7 @@ const Votacion = (props) => {
                 { headers: { 'Authorization': `Bearer ${accessToken}` } })
                 .catch(console.error);
 
-                
+
             let { votacion, alias } = res?.data || {};
             if (votacion) setValues(JSON.parse((votacion)));
             if (alias) setAlias(Object.keys(JSON.parse(alias))[0]);
@@ -235,6 +237,7 @@ const Votacion = (props) => {
                                 <Slider
                                     style={{ color: x.color }}
                                     step={0.01}
+                                    inputProps={{ step: 0.01, min: 0, max: 99.99, type: 'number' }}
                                     //valueLabelDisplay="on"
                                     value={x.value}
                                     onChange={e => handleChangePrimary(e, x)} />
@@ -245,7 +248,7 @@ const Votacion = (props) => {
                                     value={x.value}
                                     size="small"
                                     onChange={e => handleChangePrimary(e, x)}
-                                    inputProps={{ step: 0.1, min: 0, max: 100, type: 'number' }}
+                                    inputProps={{ step: 0.01, min: 0, max: 99.99, type: 'number' }}
                                 />
                             </Grid>
                         </Grid>
@@ -270,17 +273,23 @@ const Votacion = (props) => {
                                 <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
                             </Grid>
                             <Grid item xs={3}>
-                                <Slider style={{ color: x.color }} step={0.01}
+                                <Slider style={{ color: x.color }}
+                                    step={0.01}
+                                    max={99.99}
+                                    min={0.1}
+                                    inputProps={{ step: 0.01, min: 0.01, max: 99.99, type: 'number' }}
                                     //valueLabelDisplay="on"
                                     value={x.ballotage} onChange={e => handleChangeBallotage(e, x)} />
                             </Grid>
                             <Grid item xs={4}>
                                 <Input
+                                    max={99.99}
+                                    min={0.1}
                                     style={{ marginLeft: '1em' }}
                                     value={x.ballotage}
                                     size="small"
                                     onChange={e => handleChangeBallotage(e, x)}
-                                    inputProps={{ step: 0.1, min: 0, max: 100, type: 'number' }}
+                                    inputProps={{ step: 0.01, min: 0.01, max: 99.99, type: 'number' }}
                                 />
                             </Grid>
                         </Grid>
