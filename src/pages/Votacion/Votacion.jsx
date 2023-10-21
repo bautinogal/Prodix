@@ -77,13 +77,10 @@ const Votacion = (props) => {
     const handleChangeBallotage = (e, x) => {
         if (isIOS && e.type === 'mousedown') return;
         let value = parseFloat(e.target.value);
-        console.log(isNaN(value))
         value = isNaN(value) ? 0.01 : value;
         value = value > 99.99 ? 99.99 : value;
         value = value < 0.01 ? 0.01 : value;
 
-        console.log(value)
-        console.log(parseFloat((100 - value).toFixed(2)))
         let _values = values.map(d => x.group === d.group ?
             { ...d, ballotage: value } :
             { ...d, ballotage: d.ballotage ? parseFloat((100 - value).toFixed(2)) : 0 })
