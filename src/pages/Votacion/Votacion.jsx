@@ -76,11 +76,17 @@ const Votacion = (props) => {
 
     const handleChangeBallotage = (e, x) => {
         if (isIOS && e.type === 'mousedown') return;
-        console.log(e.target.value)
-        console.log(parseFloat((100 - e.target.value).toFixed(2)))
+        let value = parseFloat(e.target.value);
+        console.log(isNaN(value))
+        value = isNaN(value) ? 0.01 : value;
+        value = value > 99.99 ? 99.99 : value;
+        value = value < 0.01 ? 0.01 : value;
+
+        console.log(value)
+        console.log(parseFloat((100 - value).toFixed(2)))
         let _values = values.map(d => x.group === d.group ?
-            { ...d, ballotage: e.target.value } :
-            { ...d, ballotage: d.ballotage ? parseFloat((100 - e.target.value).toFixed(2)) : 0 })
+            { ...d, ballotage: value } :
+            { ...d, ballotage: d.ballotage ? parseFloat((100 - value).toFixed(2)) : 0 })
 
         _values = _values.map(d => ({ ...d, ballotageWinner: d.ballotage > 50 ? true : false }));
         setValues(_values)
@@ -283,8 +289,6 @@ const Votacion = (props) => {
                             </Grid>
                             <Grid item xs={4}>
                                 <Input
-                                    max={99.99}
-                                    min={0.1}
                                     style={{ marginLeft: '1em' }}
                                     value={x.ballotage}
                                     size="small"
