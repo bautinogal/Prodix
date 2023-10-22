@@ -30,7 +30,9 @@ export default function Main() {
 
     const [hash, setHash] = useState(sessionStorage.getItem('hash') || '');
     const [alias, setAlias] = useState(sessionStorage.getItem('alias') || '');
+    const [vot, setVot] = useState(sessionStorage.getItem('votacion') || '');
     const [page, setPage] = useState('Landing');
+    const [loading, setLoading] = useState(0);
 
     const { logout, user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
@@ -39,55 +41,37 @@ export default function Main() {
         const openProfile = Boolean(anchorEl);
 
         return (<section className="wrapper style1 align-left">
-            <div className="inner row">
-                <div className="col-6 left-aligned" style={{ padding: 0 }}>
-                    <a href="#">
+            <div className="inner row" style={{ padding: 0 }}>
+                <div className="col-6 left-aligned" style={{ padding: 0, paddingTop: '.5em' }}>
+                    <a>
                         <img src={logo4} alt="logo" height="80" />
                     </a>
                 </div>
-                <div className='col-6'>
-                    <ul className="icons right-aligned" style={{ marginTop: 15 }}>
-                        <li><a onClick={e => setAnchorEl(e.currentTarget)} href="#" className="icon style2 fa-user fa-solid content-align-right"><span className="label">User</span></a></li>
+                <div className='col-6' style={{ padding: 0, paddingTop: '1em', paddingRight: '1em' }}>
+                    <ul className="icons right-aligned">
+                        <li><a onClick={e => setAnchorEl(e.currentTarget)} className="icon style2 fa-user fa-solid content-align-right"><span className="label">User</span></a></li>
                     </ul>
                 </div>
                 <Menu anchorEl={anchorEl} open={openProfile} onClose={e => setAnchorEl(null)}>
                     <MenuItem onClick={e => setAnchorEl(null)}>{`Alias: ${alias}`}</MenuItem>
                     <MenuItem onClick={e => setAnchorEl(null)}>{`Código: ${hash}`}</MenuItem>
+                    <MenuItem onClick={e => setPage('Votacion')}>{`Ir a Votación...`}</MenuItem>
+                    <MenuItem onClick={e => setPage('Resultados')}>{`Ir a Resultados...`}</MenuItem>
                 </Menu>
             </div>
         </section>)
-    }
+    };
+
+    const AliasModal = () => {
+
+    };
 
     const Landing = (props) => {
         const [anchorEl, setAnchorEl] = useState(null);
         const openProfile = Boolean(anchorEl);
 
         const onJugar = () => setPage('Votacion');
-        const signin = async () => {
-            let res = await axios.post(`${env.backendUrl}/signin`, {
-                agent: navigator.userAgent || '',
-                conc: navigator.hardwareConcurrency || '',
-                mem: navigator.deviceMemory || '',
-                codeName: navigator.appCodeName || '',
-                appName: navigator.appName || '',
-                version: navigator.appVersion || '',
-                platform: navigator.platform || '',
-                vendor: navigator.vendor || '',
 
-            }).catch(console.error);
-
-            if (res?.data?.hash) {
-                sessionStorage.setItem('hash', res.data.hash);
-                setHash(res.data.hash);
-            }
-            if (res?.data?.alias) {
-                sessionStorage.setItem('alias', res.data.alias);
-                setAlias(res.data.alias);
-            }
-            console.log(res?.data?.hash, res?.data?.alias)
-        };
-
-        useEffect(() => { if (!(hash || user || isAuthenticated)) signin() }, [isAuthenticated, user, hash, alias]);
 
         return (
             <div id="wrapper" className="divided">
@@ -122,7 +106,7 @@ export default function Main() {
 
                         </ul>
                         <ul className="actions stacked">
-                            <li><a href="#" onClick={onJugar} className="mainbtn button bold wide">Jugar</a></li>
+                            <li><a onClick={onJugar} className="mainbtn button bold wide">Jugar</a></li>
                         </ul>
                     </div>
                     <div className="image  ">
@@ -141,7 +125,7 @@ export default function Main() {
                             <li><i className="fas fa-lg fa-check check-color"></i>Revalorizar el interés en la democracia</li>
                         </ul>
                         <ul className="actions stacked">
-                            <li><a href="#" onClick={onJugar} className="mainbtn button bold wide">Jugar</a></li>
+                            <li><a onClick={onJugar} className="mainbtn button bold wide">Jugar</a></li>
                         </ul>
                     </div>
                     <div className="image  ">
@@ -159,7 +143,7 @@ export default function Main() {
                             <li><p><span className='subtitle'>Seguro y anónimo</span> <br /> Tus datos están seguros y tu participación puede ser anónima.</p></li>
                         </ul>
                         <ul className="actions stacked">
-                            <li><a href="#" onClick={onJugar} className="mainbtn button bold wide">Jugar</a></li>
+                            <li><a onClick={onJugar} className="mainbtn button bold wide">Jugar</a></li>
                         </ul>
                     </div>
                     <div className="content  ">
@@ -175,7 +159,7 @@ export default function Main() {
                             <img src={votodibujo5} alt="" style={{ width: '95%' }} />
                         </div>
                         <ul className="actions stacked">
-                            <li><a onClick={onJugar} href="#" className="mainbtn button bold wide">HACÉ TU PREDICCIÓN</a></li>
+                            <li><a onClick={onJugar} className="mainbtn button bold wide">HACÉ TU PREDICCIÓN</a></li>
                         </ul>
                     </div>
                     <div className="">
@@ -194,9 +178,9 @@ export default function Main() {
     };
 
     const Votacion = (props) => {
-        const [values, setValues] = useState(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null, firstRoundWinner: false })));
+        const [values, setValues] = useState(sessionStorage.getItem('votacion') ? JSON.parse(sessionStorage.getItem('votacion')) :
+            data?.map(x => ({ ...x, value: x.dfltValue, _value: x.dfltValue, ballotage: null, _ballotage: null, firstRoundWinner: false })));
         const [openTutorial, setOpenTutorial] = useState(true);
-        const [loading, setLoading] = useState(0);
         const [alias, setAlias] = useState(null);
         const [openAlias, setOpenAlias] = useState(false);
         const [_alias, set_Alias] = useState(alias || user?.name || '');
@@ -207,7 +191,21 @@ export default function Main() {
             setOpenAlias(false);
         }
 
+        function handleKeyPress(e) {
+            if (e.keyCode === 13) {
+                e.target.blur();
+                //Write you validation logic here
+            }
+        }
+
         const handleChangePrimary = (e, x) => {
+
+            const _values = values.map(d => x.group === d.group ? { ...d, _value: parseFloat(e.target.value) } : { ...d })
+
+            setValues(_values);
+        };
+
+        const handleChangePrimaryBlur = (e, x) => {
 
             if (isIOS && e.type === 'mousedown') return;
             const resetBallotage = _values => _values.map(v => ({ ...v, ballotage: null, firstRoundWinner: false, ballotageWinner: false }));
@@ -217,8 +215,8 @@ export default function Main() {
             let oldValue = values?.find(v => v.group === x.group)?.value;
             let newValue = parseFloat(Math.min(oldValue + freePoints, e.target.value).toFixed(2));
             let dif = newValue - oldValue;
-            let _values = values?.map(d => x.group === d.group ? { ...d, value: newValue } : { ...d })
-            _values = _values?.map(d => d.autoAdjust ? { ...d, value: parseFloat((d.value - dif / freePointsElementsCount).toFixed(2)) } : { ...d })
+            let _values = values?.map(d => x.group === d.group ? { ...d, value: newValue, _value: newValue } : { ...d })
+            _values = _values?.map(d => d.autoAdjust ? { ...d, value: parseFloat((d.value - dif / freePointsElementsCount).toFixed(2)), _value: newValue } : { ...d })
 
             let [first, second] = _values.filter(v => !v.autoAdjust)?.sort((a, b) => b.value - a.value).slice(0, 2);
 
@@ -236,7 +234,9 @@ export default function Main() {
             else if (first?.value > 0 && second?.value > 0 && ((first && !first.ballotage) || (second && !second.ballotage))) {
                 _values = resetBallotage(_values);
                 if (first) _values.find(v => v.group === first.group).ballotage = 50;
+                if (first) _values.find(v => v.group === first.group)._ballotage = 50;
                 if (second) _values.find(v => v.group === second.group).ballotage = 50;
+                if (second) _values.find(v => v.group === second.group)._ballotage = 50;
             } else if (first?.value === 0 || second?.value === 0) {
                 _values = resetBallotage(_values);
             }
@@ -244,15 +244,27 @@ export default function Main() {
             setValues(_values);
         };
 
-        const handleChangeBallotage = (e, x) => {
+        const handleChangeBallotageBlur = (e, x) => {
             if (isIOS && e.type === 'mousedown') return;
-            let _values = values.map(d => x.group === d.group ?
-                { ...d, ballotage: e.target.value } :
-                { ...d, ballotage: d.ballotage ? parseFloat((100 - e.target.value).toFixed(2)) : null })
+            let value = parseFloat(e.target.value);
+            value = isNaN(value) ? 0.01 : value;
+            value = value > 99.99 ? 99.99 : value;
+            value = value < 0.01 ? 0.01 : value;
 
-            _values = _values.map(d => ({ ...d, ballotageWinner: d.ballotage > 50 ? true : false }));
+            let _values = values.map(d => x.group === d.group ?
+                { ...d, ballotage: value } :
+                { ...d, ballotage: d.ballotage ? parseFloat((100 - value).toFixed(2)) : 0 })
+
+            _values = _values.map(d => ({ ...d, _ballotage: d.ballotage, ballotageWinner: d.ballotage > 50 ? true : false }));
             setValues(_values)
         };
+
+        const handleChangeBallotage = (e, x) => {
+
+            const _values = values.map(d => x.group === d.group ? { ...d, _ballotage: parseFloat(e.target.value) } : { ...d })
+            setValues(_values);
+        };
+
 
         const TutorialVotacion = () => {
             const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
@@ -330,7 +342,11 @@ export default function Main() {
 
 
                 let { votacion, alias } = res?.data || {};
-                if (votacion) setValues(JSON.parse((votacion)));
+                if (votacion) {
+                    setValues(JSON.parse((votacion)));
+                    setVot(votacion);
+                    sessionStorage.setItem('votacion', JSON.stringify(votacion));
+                }
                 if (alias) setAlias(Object.keys(JSON.parse(alias))[0]);
                 setLoading(0);
                 if (!alias) setOpenAlias(true);
@@ -338,23 +354,22 @@ export default function Main() {
         };
 
         const onVotar = async () => {
-            setLoading(1);
-            const accessToken = await getAccessTokenSilently().catch(console.error);
-            const payload = values.map(x => ({
-                name: x.name,
-                lastName: x.lastName,
-                group: x.group,
-                value: parseFloat(parseFloat(x.value).toFixed(2)),
-                ballotage: parseFloat(parseFloat(x.ballotage)?.toFixed(2)),
-                firstRoundWinner: x.firstRoundWinner,
-                ballotageWinner: x.ballotageWinner
-            }));
-            await axios.post(`${env.backendUrl}/votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
-            setLoading(0);
-            setPage('Resultados');
-        };
+            if (hash) {
+                await axios.post(`${env.backendUrl}/votar`, { votacion: values, hash }).catch(console.error);
+                setVot(values);
+                sessionStorage.setItem('votacion', JSON.stringify(values));
+                setPage('Resultados');
+            } else {
+                setLoading(1);
+                const accessToken = await getAccessTokenSilently().catch(console.error);
+                await axios.post(`${env.backendUrl}/votacion`, values, { headers: { 'Authorization': `Bearer ${accessToken}` } }).catch(console.error);
+                setVot(values);
+                sessionStorage.setItem('votacion', JSON.stringify(values));
+                setLoading(0);
+                setPage('Resultados');
+            }
 
-        useEffect(() => { onLogin(); }, [isAuthenticated, user]);
+        };
 
         return (<div style={{
             backgroundImage: "url(/src/pages/Landing/img/bgWave.png)", backgroundSize: 'cover',
@@ -375,7 +390,7 @@ export default function Main() {
                 </DialogContent>
                 <DialogActions>
                     <ul className="actions stacked">
-                        <li><a onClick={onAcceptAlias} href="#" className="mainbtn button bold wide">Aceptar</a></li>
+                        <li><a onClick={onAcceptAlias} className="mainbtn button bold wide">Aceptar</a></li>
                     </ul>
                 </DialogActions>
             </Dialog>
@@ -384,7 +399,6 @@ export default function Main() {
                 <Grid item xs={12}>
                     <ProfileIcon />
                 </Grid>
-
                 <Grid item xs={8}>
                     <Typography style={{ fontWeight: 'bold', marginLeft: '1em' }} variant="h6" gutterBottom component="div">{`¿Cómo creés que van a ser los resultados de las elecciones?`} </Typography>
                 </Grid>
@@ -408,15 +422,17 @@ export default function Main() {
                                         step={0.01}
                                         //valueLabelDisplay="on"
                                         value={x.value}
-                                        onChange={e => handleChangePrimary(e, x)} />
+                                        onChange={e => handleChangePrimaryBlur(e, x)} />
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Input
                                         style={{ marginLeft: '1em' }}
-                                        value={x.value}
+                                        value={x._value}
                                         size="small"
                                         onChange={e => handleChangePrimary(e, x)}
+                                        onBlur={e => handleChangePrimaryBlur(e, x)}
                                         inputProps={{ step: 0.1, min: 0, max: 100, type: 'number' }}
+                                        onKeyDown={(e) => handleKeyPress(e)}
                                     />
                                 </Grid>
                             </Grid>
@@ -443,15 +459,17 @@ export default function Main() {
                                 <Grid item xs={3}>
                                     <Slider style={{ color: x.color }} step={0.01}
                                         //valueLabelDisplay="on"
-                                        value={x.ballotage} onChange={e => handleChangeBallotage(e, x)} />
+                                        value={x.ballotage} onChange={e => handleChangeBallotageBlur(e, x)} />
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Input
                                         style={{ marginLeft: '1em' }}
-                                        value={x.ballotage}
+                                        value={x._ballotage}
                                         size="small"
                                         onChange={e => handleChangeBallotage(e, x)}
+                                        onBlur={e => handleChangeBallotageBlur(e, x)}
                                         inputProps={{ step: 0.1, min: 0, max: 100, type: 'number' }}
+                                        onKeyDown={(e) => handleKeyPress(e)}
                                     />
                                 </Grid>
                             </Grid>
@@ -464,7 +482,7 @@ export default function Main() {
                     </Button> */}
                     <ul className="actions stacked">
                         <li><a disabled={!values.find(v => v.firstRoundWinner || v.ballotageWinner)}
-                            onClick={onVotar} href="#" className="mainbtn button bold wide" style={{ marginRight: '2em', marginBottom: '2em' }}>GUARDAR</a></li>
+                            onClick={onVotar} className="mainbtn button bold wide" style={{ marginRight: '2em', marginBottom: '2em' }}>GUARDAR</a></li>
                     </ul>
                 </Grid>
             </Grid>
@@ -478,10 +496,10 @@ export default function Main() {
         const [filter, setFilter] = useState('');
 
         useEffect(() => {
-            getAccessTokenSilently()
-                .then(accessToken => axios.get(`${env.backendUrl}/votaciones`, { headers: { 'Authorization': `Bearer ${accessToken}` } }))
+            axios.get(`${env.backendUrl}/votaciones`)
                 .then(r => setVotacion(r.data))
                 .catch(setVotacion([]));
+
         }, []);
 
         const results = votacion.map(x => x.votacion).flat().reduce((p, x) => {
@@ -513,14 +531,10 @@ export default function Main() {
 
         return (<div>
             {votacion.length === 0 ? <LoadingModal /> : null}
-            <Grid
-                container
-                direction="column"
-                justifyContent="flex-end"
-                alignItems="center">
-                <img src={logo4} alt="" style={{ height: '6em', margin: '2em' }} />
+            <Grid container direction="column" justifyContent="flex-end" alignItems="center">
+                <ProfileIcon />
                 <Typography style={{ fontWeight: '900', fontSize: '6vh' }} variant="h4" gutterBottom component="div">{`Resultados`}</Typography>
-                <Typography variant="p" gutterBottom component="div">{`Total de predicciones ${votacion.length} personas`}</Typography>
+                {/* <Typography variant="p" gutterBottom component="div">{`Total de predicciones ${votacion.length} personas`}</Typography> */}
                 <Grid container spacing={2} padding={'2em'} style={{ marginTop: '1em' }} >
                     <Grid item xs={4} children={<Avatar style={{ border: 'solid 4px ' + (ganadorPrimera === 'Massa' ? '#f6aef8' : '#47D3E5'), width: '5em', height: '5em' }} src={results?.Massa?.profileURL} />} style={{ display: 'flex', justifyContent: 'center' }} />
                     <Grid item xs={4} children={<Avatar style={{ border: 'solid 4px ' + (ganadorPrimera === 'Bullrich' ? '#f6aef8' : '#47D3E5'), width: '5em', height: '5em' }} src={results?.Bullrich?.profileURL} />} style={{ display: 'flex', justifyContent: 'center' }} />
@@ -546,10 +560,7 @@ export default function Main() {
                     <Typography style={{ fontWeight: '600' }} variant="h5" align='center' gutterBottom component="div">{`Creen que hay ballotage`}</Typography>
                 </Grid>
                 <Typography style={{ marginTop: '2em', fontWeight: '600', fontSize: '5vh' }} gutterBottom component="div">{`${balloCandPer}%`}</Typography>
-                <Grid container
-                    direction="row"
-                    justifyContent="flex-end"
-                    alignItems="center">
+                <Grid container direction="row" justifyContent="flex-end" alignItems="center">
                     <Grid style={{ display: 'flex', justifyContent: 'flex-end' }} item xs={5} children={<Avatar style={{ border: 'solid 4px #f6aef8', width: '5em', height: '5em' }} src={results?.[balloCand[0]]?.profileURL} />} />
                     <Grid item xs={2} children={<Typography variant="p" gutterBottom component="div">{`vs`}</Typography>} style={{ display: 'flex', justifyContent: 'center', fontWeight: '900', fontSize: '3vh' }} align='center' />
                     <Grid style={{ display: 'flex', justifyContent: 'flex-start' }} item xs={5} children={<Avatar style={{ border: 'solid 4px #47D3E5', width: '5em', height: '5em' }} src={results?.[balloCand[1]]?.profileURL} />} />
@@ -581,7 +592,7 @@ export default function Main() {
                                 let a = [0, 1, 2, 3, 4, 5]
                                 let arr = tab === 0 ? a.map(i => vot?.votacion[i]?.value) : a.map(i => vot?.votacion[i]?.ballotage);
                                 if (filter !== '' && !vot.alias.toLowerCase().includes(filter.toLowerCase())) return null;
-                                return (<ListItem key={vot.sub}>
+                                return (<ListItem key={vot.sub || vot.hash}>
                                     <Grid container spacing={0} height={'1em'} sx={{ backgroundColor: (i % 2 ? '#ededed' : '##dcdcdc') }}>
                                         <Grid item xs={3.3} height={'1em'} ><Typography fontSize={'.75em'} fontWeight={600} style={{ whiteSpace: 'nowrap', overflow: 'hidden', 'text-overflow': 'ellipsis' }}>{vot.alias} </Typography></Grid>
                                         {arr.map(i => <Grid item xs={1.45} height={'1em'} fontSize={'.75em'} fontWeight={500}>{i ?? '-'}</Grid>)}
@@ -598,6 +609,51 @@ export default function Main() {
 
         )
     };
+
+    const signin = async () => {
+        let res = await axios.post(`${env.backendUrl}/signin`, {
+            agent: navigator.userAgent || '',
+            conc: navigator.hardwareConcurrency || '',
+            mem: navigator.deviceMemory || '',
+            codeName: navigator.appCodeName || '',
+            appName: navigator.appName || '',
+            version: navigator.appVersion || '',
+            platform: navigator.platform || '',
+            vendor: navigator.vendor || '',
+        }).catch(console.error);
+
+        if (res?.data?.hash) {
+            sessionStorage.setItem('hash', res.data.hash);
+            setHash(res.data.hash);
+        }
+        if (res?.data?.alias) {
+            sessionStorage.setItem('alias', res.data.alias);
+            setAlias(res.data.alias);
+        }
+        console.log(res?.data?.hash, res?.data?.alias)
+    };
+    const getAliasWithSub = async () => {
+        setLoading(1);
+        const accessToken = await getAccessTokenSilently().catch(console.error);
+        const { userAgent, hardwareConcurrency: conc, deviceMemory: mem } = navigator;
+
+        let res = await axios.post(`${env.backendUrl}/login`,
+            { ...user, userAgent, conc, mem },
+            { headers: { 'Authorization': `Bearer ${accessToken}` } })
+            .catch(console.error);
+
+
+        let { votacion, alias } = res?.data || {};
+        if (votacion) setValues(JSON.parse((votacion)));
+        if (alias) setAlias(Object.keys(JSON.parse(alias))[0]);
+        setLoading(0);
+        //    / if (!alias) setOpenAlias(true);
+    };
+
+    useEffect(() => {
+        if (!(hash || user || isAuthenticated || alias)) signin();
+        else if (isAuthenticated && user) getAliasWithSub();
+    }, [isAuthenticated, user, hash, alias]);
 
     switch (page) {
         case 'Landing': return <Landing />;

@@ -25,7 +25,7 @@ const Votacion = (props) => {
     const { logout, user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
     const [values, setValues] = useState(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null, firstRoundWinner: false })));
     const [openTutorial, setOpenTutorial] = useState(true);
-    const [loading, setLoading] = useState(0);
+    
     const [alias, setAlias] = useState(null);
     const [openAlias, setOpenAlias] = useState(false);
     const [_alias, set_Alias] = useState(alias || user?.name || '');
