@@ -498,7 +498,7 @@ export default function Main() {
         const [votacion, setVotacion] = useState([]);
         const [tab, setTab] = useState(0);
         const [filter, setFilter] = useState('');
-        const [page, setPage] = useState(0);
+        const [pageN, setPageN] = useState(0);
 
         useEffect(() => {
             axios.get(`${env.backendUrl}/votaciones`)
@@ -599,7 +599,7 @@ export default function Main() {
                                 return 0;
                             })
                                 .filter((vot, i) => filter === '' || vot.alias.toLowerCase().includes(filter.toLowerCase()))
-                                .splice(page * 20, 20)
+                                .splice(pageN * 20, 20)
                                 .map((vot, i) => {
                                     let a = [0, 1, 2, 3, 4, 5]
                                     let arr = tab === 0 ? a.map(i => vot?.votacion[i]?.value) : a.map(i => vot?.votacion[i]?.ballotage);
@@ -614,8 +614,8 @@ export default function Main() {
                     </li>
                 </List>
                 <Stack direction="row" spacing={2}>
-                    <Button disabled={page === 0} onClick={e => setPage(page - 1)}>{'<'}</Button>
-                    <Button disabled={page + 1 >= (votacion.length / 20)} onClick={e => setPage(page + 1)}>{'>'}</Button>
+                    <Button disabled={pageN === 0} onClick={e => setPageN(pageN - 1)}>{'<'}</Button>
+                    <Button disabled={pageN + 1 >= (votacion.length / 20)} onClick={e => setPageN(pageN + 1)}>{'>'}</Button>
                 </Stack>
                 <Button variant="contained" onClick={() => setPage('Votacion')} className="mainbtn button bold wide" style={{ borderRadius: '4em', marginTop: '5em' }}>EDITAR MI PRODE</Button>
                 <Button variant="contained" disabled onClick={() => setPage(page)} className="mainbtn button bold wide" style={{ borderRadius: '4em', marginBottom: '5em', marginTop: '1em' }}>COMPARTIR</Button>
