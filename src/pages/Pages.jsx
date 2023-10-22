@@ -201,7 +201,7 @@ export default function Main() {
         const handleChangePrimary = (e, x) => {
 
             const _values = values.map(d => x.group === d.group ? { ...d, _value: parseFloat(e.target.value) } : { ...d })
-            _values = _values?.map(d => d.autoAdjust ? { ...d, value: parseFloat((d.value - dif / freePointsElementsCount).toFixed(2)), _value: newValue } : { ...d })
+           // _values = _values?.map(d => d.autoAdjust ? { ...d, value: parseFloat((d.value - dif / freePointsElementsCount).toFixed(2)), _value: newValue } : { ...d })
             setValues(_values);
         };
 
