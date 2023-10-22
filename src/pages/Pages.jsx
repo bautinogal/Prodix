@@ -371,6 +371,11 @@ export default function Main() {
 
         };
 
+        const padronPer = (x) => {
+            console.log(x._value);
+            return '  ' + parseFloat(x._value * 35394425 / (1000000 * 100)).toFixed(2) + 'M';
+        }
+
         return (<div style={{
             backgroundImage: "url(/src/pages/Landing/img/bgWave.png)", backgroundSize: 'cover',
             backgroundRepeatt: 'no-repeat', backgroundAttachment: 'fixed', width: '100%', height: '100%', minHeight: '105vh'
@@ -414,7 +419,7 @@ export default function Main() {
                                     </Badge>
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
+                                    <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}${padronPer(x)}`} </Typography>
                                 </Grid>
                                 <Grid item xs={3}>
                                     <Slider
@@ -454,7 +459,7 @@ export default function Main() {
 
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
+                                    <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}${padronPer(x)}`} </Typography>
                                 </Grid>
                                 <Grid item xs={3}>
                                     <Slider style={{ color: x.color }} step={0.01}
