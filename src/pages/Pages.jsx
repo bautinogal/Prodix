@@ -651,7 +651,7 @@ export default function Main() {
     };
 
     useEffect(() => {
-        if (!(hash || user || isAuthenticated || alias)) signin();
+        if (!(hash && alias) && !(isAuthenticated || user)) signin();
         else if (isAuthenticated && user) getAliasWithSub();
     }, [isAuthenticated, user, hash, alias]);
 
