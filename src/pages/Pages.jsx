@@ -216,7 +216,7 @@ export default function Main() {
             let newValue = parseFloat(Math.min(oldValue + freePoints, e.target.value).toFixed(2));
             let dif = newValue - oldValue;
             let _values = values?.map(d => x.group === d.group ? { ...d, value: newValue, _value: newValue } : { ...d })
-            _values = _values?.map(d => d.autoAdjust ? { ...d, _value: parseFloat((d._value - dif / freePointsElementsCount).toFixed(2)), value:  parseFloat((d._value - dif / freePointsElementsCount).toFixed(2)) } : { ...d })
+            _values = _values?.map(d => d.autoAdjust ? { ...d, _value: parseFloat((d._value - dif / freePointsElementsCount).toFixed(2)), value: parseFloat((d._value - dif / freePointsElementsCount).toFixed(2)) } : { ...d })
 
             let [first, second] = _values.filter(v => !v.autoAdjust)?.sort((a, b) => b.value - a.value).slice(0, 2);
 
@@ -404,8 +404,8 @@ export default function Main() {
                 </Grid>
                 <Grid item xs={12} />
                 <Grid item xs={12}>
-                    {values?.map((x,i) =>
-                        <Grid item key={x.group + i } xs={12} style={{ marginLeft: '1em' }}>
+                    {values?.map((x, i) =>
+                        <Grid item key={x.group + i} xs={12} style={{ marginLeft: '1em' }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={2}>
                                     <Badge overlap="circular" anchorOrigin={{ vertical: 'top', horizontal: 'right', }}
@@ -494,6 +494,7 @@ export default function Main() {
         const [votacion, setVotacion] = useState([]);
         const [tab, setTab] = useState(0);
         const [filter, setFilter] = useState('');
+        const [page, setPage] = useState(0);
 
         useEffect(() => {
             axios.get(`${env.backendUrl}/votaciones`)
@@ -588,17 +589,23 @@ export default function Main() {
                                     <Grid item xs={1.45} ><Avatar style={{ width: '1.8em', height: '1.8em' }} src={results?.Blanco?.profileURL} /></Grid>
                                 </Grid>
                             </ListSubheader>
-                            {votacion.map((vot, i) => {
-                                let a = [0, 1, 2, 3, 4, 5]
-                                let arr = tab === 0 ? a.map(i => vot?.votacion[i]?.value) : a.map(i => vot?.votacion[i]?.ballotage);
-                                if (filter !== '' && !vot.alias.toLowerCase().includes(filter.toLowerCase())) return null;
-                                return (<ListItem key={vot.sub || vot.hash}>
-                                    <Grid container spacing={0} height={'1em'} sx={{ backgroundColor: (i % 2 ? '#ededed' : '##dcdcdc') }}>
-                                        <Grid item xs={3.3} height={'1em'} ><Typography fontSize={'.75em'} fontWeight={600} style={{ whiteSpace: 'nowrap', overflow: 'hidden', 'text-overflow': 'ellipsis' }}>{vot.alias} </Typography></Grid>
-                                        {arr.map(i => <Grid item xs={1.45} height={'1em'} fontSize={'.75em'} fontWeight={500}>{i ?? '-'}</Grid>)}
-                                    </Grid>
-                                </ListItem>)
-                            })}
+                            {votacion.sort((a, b) => {
+                                if (a.alias === alias) return -1;
+                                if (b.alias === alias) return 1;
+                                return 0;
+                            })
+                                .filter((vot, i) => filter === '' || (a.alias === alias || a.id === user.sub) || vot.alias.toLowerCase().includes(filter.toLowerCase()))
+                                .splice(page * 20, 20)
+                                .map((vot, i) => {
+                                    let a = [0, 1, 2, 3, 4, 5]
+                                    let arr = tab === 0 ? a.map(i => vot?.votacion[i]?.value) : a.map(i => vot?.votacion[i]?.ballotage);
+                                    return (<ListItem key={vot.sub || vot.hash}>
+                                        <Grid container spacing={0} height={'1em'} sx={{ backgroundColor: (i % 2 ? '#ededed' : '##dcdcdc') }}>
+                                            <Grid item xs={3.3} height={'1em'} ><Typography fontSize={'.75em'} fontWeight={i === 0 ? 900 : 500} style={{ whiteSpace: 'nowrap', overflow: 'hidden', 'text-overflow': 'ellipsis' }}>{vot.alias} </Typography></Grid>
+                                            {arr.map(j => <Grid item xs={1.45} height={'1em'} fontSize={'.75em'} fontWeight={i === 0 ? 900 : 500}>{j ?? '-'}</Grid>)}
+                                        </Grid>
+                                    </ListItem>)
+                                })}
                         </ul>
                     </li>
                 </List>
