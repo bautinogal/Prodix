@@ -12,10 +12,9 @@ import {
     Avatar, Badge, Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Grid, Slider, Step, StepLabel, Stepper,
     Typography, IconButton, Input, TextField
 } from '@mui/material';
-import { EmojiEvents, EmojiEmotions, EmojiObjects, EmojiPeople, EmojiSymbols, EmojiTransportation, InfoSharp } from '@mui/icons-material';
+import { EmojiEvents } from '@mui/icons-material';
 import './Votacion.css';
 import logo4 from '../Landing/img/logo4.png';
-import bgWave from '../Landing/img/bgWave.png';
 import axios from 'axios';
 import LoadingModal from '../../components/LoadingModal.jsx';
 
@@ -26,7 +25,7 @@ const Votacion = (props) => {
     const { logout, user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
     const [values, setValues] = useState(data?.map(x => ({ ...x, value: x.dfltValue, ballotage: null, firstRoundWinner: false })));
     const [openTutorial, setOpenTutorial] = useState(true);
-    const [loading, setLoading] = useState(0);
+    
     const [alias, setAlias] = useState(null);
     const [openAlias, setOpenAlias] = useState(false);
     const [_alias, set_Alias] = useState(alias || user?.name || '');
