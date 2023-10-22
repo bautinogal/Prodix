@@ -372,7 +372,6 @@ export default function Main() {
         };
 
         const padronPer = (x) => {
-            console.log(x._value);
             return '  ' + parseFloat(x._value * 35394425 / (1000000 * 100)).toFixed(2) + 'M';
         }
 
@@ -459,7 +458,7 @@ export default function Main() {
 
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}${padronPer(x)}`} </Typography>
+                                    <Typography variant="h6" overflow={'clip'} fontSize={'2vh'} lineHeight={'3.2'} height={'7vh'} gutterBottom component="div">{`${x.lastName}`} </Typography>
                                 </Grid>
                                 <Grid item xs={3}>
                                     <Slider style={{ color: x.color }} step={0.01}
