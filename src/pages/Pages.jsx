@@ -201,7 +201,7 @@ export default function Main() {
         const handleChangePrimary = (e, x) => {
 
             const _values = values.map(d => x.group === d.group ? { ...d, _value: parseFloat(e.target.value) } : { ...d })
-
+            _values = _values?.map(d => d.autoAdjust ? { ...d, value: parseFloat((d.value - dif / freePointsElementsCount).toFixed(2)), _value: newValue } : { ...d })
             setValues(_values);
         };
 
@@ -216,7 +216,7 @@ export default function Main() {
             let newValue = parseFloat(Math.min(oldValue + freePoints, e.target.value).toFixed(2));
             let dif = newValue - oldValue;
             let _values = values?.map(d => x.group === d.group ? { ...d, value: newValue, _value: newValue } : { ...d })
-            _values = _values?.map(d => d.autoAdjust ? { ...d, value: parseFloat((d.value - dif / freePointsElementsCount).toFixed(2)), _value: newValue } : { ...d })
+            _values = _values?.map(d => d.autoAdjust ? { ...d, _value: parseFloat((d._value - dif / freePointsElementsCount).toFixed(2)), value:  parseFloat((d._value - dif / freePointsElementsCount).toFixed(2)) } : { ...d })
 
             let [first, second] = _values.filter(v => !v.autoAdjust)?.sort((a, b) => b.value - a.value).slice(0, 2);
 
@@ -404,8 +404,8 @@ export default function Main() {
                 </Grid>
                 <Grid item xs={12} />
                 <Grid item xs={12}>
-                    {values?.map(x =>
-                        <Grid item key={x.group} xs={12} style={{ marginLeft: '1em' }}>
+                    {values?.map((x,i) =>
+                        <Grid item key={x.group + i } xs={12} style={{ marginLeft: '1em' }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={2}>
                                     <Badge overlap="circular" anchorOrigin={{ vertical: 'top', horizontal: 'right', }}
