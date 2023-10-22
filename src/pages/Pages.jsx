@@ -594,7 +594,7 @@ export default function Main() {
                                 if (b.alias === alias) return 1;
                                 return 0;
                             })
-                                .filter((vot, i) => filter === '' || (a.alias === alias || a.id === user.sub) || vot.alias.toLowerCase().includes(filter.toLowerCase()))
+                                .filter((vot, i) => filter === '' || vot.alias.toLowerCase().includes(filter.toLowerCase()))
                                 .splice(page * 20, 20)
                                 .map((vot, i) => {
                                     let a = [0, 1, 2, 3, 4, 5]
